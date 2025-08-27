@@ -1,103 +1,157 @@
-import Image from "next/image";
+
+'use client'
+import { useState, useEffect } from 'react'
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
+import {colores, imagenes, letratasa, menu1, menutasa} from '../src/componentes/tema';
+import {Inicio} from '../src/comunes';
+import Cargando from '../src/componentes/cargar/cargar'
+import { Ver_Valores } from '@/src/comunes/valores';
+import { Typography } from '@mui/material';
+import MenuBotones from '../src/componentes/menubotones';
+import Tabla from '../src/componentes/herramientas/tabla';
+import Sistema from '../src/componentes/sistema'
+import Login from '../src/componentes/login';
+import Image from 'next/image';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: (theme.vars ?? theme).palette.text.secondary,
+  ...theme.applyStyles('dark', {
+    backgroundColor: '#1A2027',
+  }),
+}));
+
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [cargando, setCargando] = useState(true);
+  const [menus, setMenus] = useState([]);
+  const [alto, setAlto] = useState(0);
+  const [ancho, setAncho] = useState(0);
+  
+  const SeleccionMenu = (seleccion:any, lista:any)=>{
+    const nuevo = lista.map((val:any)=>{
+      return {...val, activo: val.value===seleccion.value}
+    })
+    setMenus(nuevo);
+  }
+  const Verificar = ()=>{
+    setCargando(true);
+    setTimeout(()=>{ 
+      inicio();
+      setCargando(false);
+    }, 3 * 1000)
+      
+  }
+  const inicio = ()=>{
+    const nuevo=[
+          {
+            imagen: imagenes.Home,
+            label:"Inicio",
+            value:'inicio',
+            activo:true
+          },
+          {
+            imagen: imagenes.Inventario,
+            label:"Inventario",
+            value:'inventario',
+          },
+          {
+            imagen: imagenes.Usuarios,
+            label:"Usuarios",
+            value:'usuarios'
+          },
+          {
+            imagen: imagenes.Salir,
+            label:"Salir",
+            value:'salir'
+          },
+          
+        ]
+        setMenus(nuevo)
+  }
+  useEffect(() => {
+    if (typeof window !== 'undefined') { // Asegurarse de que window está disponible
+      setAlto(window.innerHeight);
+      setAncho(window.innerWidth);
+    }
+    const Iniciar= async()=>{
+      await Inicio();
+      setTimeout(()=>{
+        inicio();
+        setCargando(false);
+      }, 2 * 1000)
+      
+    }
+    Iniciar();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+  }, []);
+  return cargando ? <Cargando open={true} /> : 
+    Ver_Valores().User 
+    ?(
+    <Box sx={{ flexGrow: 1, bgcolor:colores.fondo, p:2 }}>
+      <Grid container spacing={1}>
+        <Grid size={12}>
+           <Item sx={menu1(alto)} >
+            <Grid container spacing={0.5}>
+              <Grid size={{ xs: 2.5, md: 2.5 }}>
+                
+                <Image                      
+                    src={imagenes.Logo}
+                    alt="Grupo Arismaos C.A."
+                    
+                    priority
+                />
+                
+              </Grid>
+              <Grid size={{ xs: 6, md: 6 }}>
+                  <Typography variant="subtitle1" 
+                    component="a"
+                    noWrap
+                    sx={letratasa}
+                    href={'https://www.bcv.org.ve/'}
+                    target='_blank'
+                  >
+                    USD {Ver_Valores() && Ver_Valores().tasa ? Ver_Valores().tasa.USD : "?"}
+                  </Typography>
+                
+              </Grid>
+              <Grid size={{ xs: 3, md: 3 }}>
+                  <Typography variant="subtitle1" 
+                    component="a"
+                    noWrap
+                    sx={letratasa}
+                    href={'https://www.bcv.org.ve/'}
+                    target='_blank'
+                  >
+                    USD {Ver_Valores() && Ver_Valores().tasa ? Ver_Valores().tasa.USD : "?"}
+                  </Typography>
+                
+              </Grid>
+            </Grid>
+            </Item>
+          
+        </Grid>
+        
+        <Grid size={{ xs: 3, md: 1.5 }}>
+          <Item sx={{height:alto * 0.84}} >
+            <MenuBotones menus={menus} onChange={SeleccionMenu}/>
+          </Item>
+        </Grid>
+        <Grid size={{ xs: 9, md: 10.5 }}>
+          <Item sx={{height:alto * 0.84}}>
+           
+            <Sistema menus={menus} Verificar={Verificar}/>
+          </Item>
+        </Grid>
+      </Grid>
+    </Box>
+  ): <Login Verificar={Verificar}/>
 }
