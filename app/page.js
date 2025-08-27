@@ -36,8 +36,8 @@ export default function Home() {
   const [alto, setAlto] = useState(0);
   const [ancho, setAncho] = useState(0);
   
-  const SeleccionMenu = (seleccion:any, lista:any)=>{
-    const nuevo = lista.map((val:any)=>{
+  const SeleccionMenu = (seleccion, lista)=>{
+    const nuevo = lista.map((val)=>{
       return {...val, activo: val.value===seleccion.value}
     })
     setMenus(nuevo);
