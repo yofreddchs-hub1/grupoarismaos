@@ -376,22 +376,42 @@ async function Enviar(props){
 
   };
   // console.log('enviar',options);
-  return await axios(options)
-    .then((res) => {
+  try {
+    const response = await fetch('/api', { // O la ruta de tu API
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Indica que envías JSON
+      },
+      body: JSON.stringify(options), // Convierte el objeto JavaScript a JSON
+    });
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Respuesta del servidor:', result);
+      return result;
+    } else {
+      console.error('Error en la solicitud POST');
+    }
+  }catch (error) {
+    console.error('Error al enviar la solicitud:', error);
+  }
+  
+  
+  // return await axios(options)
+  //   .then((res) => {
       
-      if (res.data.Respuesta==='Error' && res.data.mensaje==="no autorizado"){
-        Usuario('Eliminar')
-        window.location.reload()
-      }
-      // this.setState({cargando:false, progreso:0})
+  //     if (res.data.Respuesta==='Error' && res.data.mensaje==="no autorizado"){
+  //       Usuario('Eliminar')
+  //       window.location.reload()
+  //     }
+  //     // this.setState({cargando:false, progreso:0})
       
-        return res.data
+  //       return res.data
       
       
-    })
-    .catch(err => {
-      console.log('Error en ',options);
-      // this.setState({cargando:false, progreso:0})
-      return {Respuesta:'Error_c', mensaje:'Error en conexión, intente nuevamente'}
-    } );
+  //   })
+  //   .catch(err => {
+  //     console.log('Error en ',options);
+  //     // this.setState({cargando:false, progreso:0})
+  //     return {Respuesta:'Error_c', mensaje:'Error en conexión, intente nuevamente'}
+  //   } );
 }
