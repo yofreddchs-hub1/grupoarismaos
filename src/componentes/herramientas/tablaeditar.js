@@ -234,7 +234,8 @@ export default function AntDesignGrid(props) {
                   return moment(new Date()).format('DD/MM/YYYY');
                 }
               }
-              valor=titulo.formato ? titulo.formato(dato.row): dato.row[titulo.field] ;
+              
+              valor=titulo.formato ? titulo.formato(dato.row): dato.row ? dato.row[titulo.field] :dato ;
             }
             if (!valor || valor==='NaN')
               valor=titulo.formato && rows[dato.id]!==undefined ? titulo.formato(rows[dato.id]) : null
@@ -504,7 +505,8 @@ export default function AntDesignGrid(props) {
     }
   }
   return (
-    <div style={{ height: '100%', width: '100%', marginTop:15, marginBottom:15, }}>
+    <div>
+    <div style={{height: '100%', width: '100%', marginTop:15, marginBottom:15, }}>
       <Stack direction={window.innerWidth > 750 ? "row" : "column"} 
              spacing={1}
              justifyContent="flex-start"
@@ -529,13 +531,14 @@ export default function AntDesignGrid(props) {
       <StyledDataGrid
         // checkboxSelection
         // hideFooter
-        components={{
+        slots={{
           Pagination: !nopaginar ? CustomPagination : null,
           NoRowsOverlay: CustomNoRowsOverlay,
-          Footer: props.Subtotal 
+          footer: props.Subtotal 
                     ? () =>SubTotales({name:props.name, Subtotal:props.Subtotal, Cambio:props.Cambio, Subtotalvalor, rows, Config, tasa, externos}) 
                     : undefined
-        }}      
+        }}
+         
         onCellClick={async(dato)=>{
           // console.log('>>>>>>>>>>>>>>>',dato.field, dato, rows, dato.value)
           // console.log(dato,dato.row)
@@ -681,7 +684,9 @@ export default function AntDesignGrid(props) {
             })
           }
         }}
+        
         hideFooter= {props.Subtotal ? false : true}
+        hideFooterPagination= {props.Subtotal ? true : false}
         localeText={local}
         columns={columns}
         rows={rows}
@@ -705,6 +710,7 @@ export default function AntDesignGrid(props) {
           boxShadow: 2,
           border: 2,
           borderColor: 'primary.light',
+          
           '& .MuiDataGrid-cell:hover': {
             color: 'primary.main',
           },
@@ -712,11 +718,13 @@ export default function AntDesignGrid(props) {
             bgcolor: (theme) =>
               theme.palette.mode === 'dark' ? '#068E17' : 'rgb(217 243 190)',
           },
-          ...style ? style : {}
+          ...style ? style : {},
+
         }}
       />
       <Dialogo  {...dialogo} config={props.Config}/>
     </div>
+  </div>
   );
 }
 
@@ -747,7 +755,7 @@ const SubTotales= (props) =>{
     return ig
   }
   const Calcular =(valor)=>{
-    // console.log('Por calcular>>>>>>>>', valor, modificado,externos[name+'-subtotal'])
+   console.log('Por calcular>>>>>>>>', valor, modificado,externos[name+'-subtotal'])
     
     props.Subtotal.map(val=>{
       val.map(col=>{

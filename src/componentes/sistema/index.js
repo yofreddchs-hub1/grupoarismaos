@@ -9,6 +9,7 @@ import { Typography } from '@mui/material';
 import Usuarios from './usuarios';
 import Login from '../login';
 import HomePage from './inicio';
+import Inventario from './inventario';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -40,6 +41,8 @@ export default function Sistema(props) {
     <div>{
             activo && activo==="inicio"
             ?   <HomePage />
+            :   activo && activo==="inventario"
+            ?   <Inventario />
             :   activo && activo==="usuarios"
             ?   <Usuarios />
             :   activo && activo==="salir"

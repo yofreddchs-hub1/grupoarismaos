@@ -580,7 +580,7 @@ const item_form = async(val, valores, _id)=>{
 
     }
   }else if (val.tipo==='Tabla'){
-    let Subtotal = Ver_Valores()['config']['Subtotales'][val.Subtotal]
+    let Subtotal = Ver_Valores()['Subtotales'][val.Subtotal]
     
     resultado={
       ...resultado,

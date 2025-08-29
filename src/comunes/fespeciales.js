@@ -4,6 +4,23 @@ import { Ver_Valores } from "./valores";
 import Link from '@mui/material/Link';
 
 export default{
+    Subtotal_entrada:(dato,resultado)=>{
+        console.log(dato, resultado);
+        if (Number(dato.cantidad)>0)
+                return Number(dato.cantidad)+ resultado.entradas
+        return resultado.entradas;
+    },
+    Subtotal_salida:(dato,resultado)=>{
+        if (Number(dato.cantidad)<0)
+                return (-1* Number(dato.cantidad))+ resultado.salidas
+        return resultado.salidas;
+    },
+    Subtotal_entrada_salida:(dato,resultado)=>{
+        
+        return Number(dato.cantidad)+ resultado.total
+        
+    },
+    //////////////////
     Editores_formapago:(params)=>{
         let editable=true;
         //quitado 'Debito',

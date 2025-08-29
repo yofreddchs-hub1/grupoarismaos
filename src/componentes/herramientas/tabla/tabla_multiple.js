@@ -120,7 +120,7 @@ function Tabla_multiple (props) {
             open: !dialogo.open,
             // tam:'lg',
             Titulo:'Cargando...',
-            Cuerpo:<div style={{height:window.innerHeight * 0.4}}><Cargando Fondo={"#fff"} open={true} config={Ver_Valores().config}/></div>,
+            Cuerpo:<div style={{height:window.innerHeight * 0.4}}><Cargando Fondo={"#fff"} open={true} config={Ver_Valores()}/></div>,
             Cerrar: ()=>{
                 setDialogo({...dialogo,open:false});
             },

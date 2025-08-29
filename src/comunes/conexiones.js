@@ -386,7 +386,7 @@ async function Enviar(props){
     });
     if (response.ok) {
       const result = await response.json();
-      console.log('Respuesta del servidor:', result);
+      
       return result;
     } else {
       console.error('Error en la solicitud POST');

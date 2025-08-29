@@ -228,7 +228,8 @@ const useStyles = {//makeStyles({
     padding: 0,
   },
   button:{
-    marginLeft:5,
+    marginLeft:2,
+    marginBottom:2,
     backgroundColor: (props)=> props.color ==='success' ?'#ffffff' :null
   },
 
@@ -860,6 +861,7 @@ export default function Page(props) {
           : null
         }
       </div>
+      {/* <div style={{height:50}}/> */}
       {values.botones ? (
         <div style={classes.barra_botones}>
           {values.botones.map((boton,i)=>{
@@ -869,7 +871,7 @@ export default function Page(props) {
                       <Button
                         {...Filtrar_campos(boton,['confirmar_mensaje'])}
                         key={'boton-'+ boton.name}
-                        // sx={classes.button}
+                        sx={classes.button}
                         disabled={boton.disabled || Boolean(boton.esperar)}
                         startIcon={Boolean(boton.esperar) ? 
                           <CircularProgress  size={20}

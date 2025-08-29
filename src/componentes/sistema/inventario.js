@@ -21,14 +21,14 @@ const Item = styled(Paper)(({ theme }) => ({
   }),
 }));
 
-export default function Usuarios(props) {
+export default function Inventario(props) {
     const {menus} = props;
     const [activo, setActivo] = useState(null);
     const [state, setState] = useState({cargando:true});
     const [alto, setAlto] = useState(0);
     useEffect(() => {
         const cargar = async()=>{
-            let titulos = await Titulos_todos(`Titulos_User_api`);
+            let titulos = await Titulos_todos(`Titulos_Inventario`);
             setState({...state, titulos, cargando:false});
         }
         console.log("Refresca usuarios")
@@ -39,16 +39,21 @@ export default function Usuarios(props) {
     }, [props]);
     const Condiciones = async(crear_campos,datos)=>{
         let {valores}= datos;
-        if (valores.passwordn!==''){
-          valores.newpassword=valores.passwordn;
-        }
-        
-        delete valores.passwordn
-        delete valores.passwordc
-        
-        
-        valores.username = valores.username.toLowerCase();
+       
         return valores;
+    }
+    const Actualizar_valores = async(valores)=>{
+        console.log(valores);
+        const entradasalida=[
+            {id:1, descripcion:'Entrada', fecha:"28/08//2025", cantidad:10},
+            {id:2, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-3},
+            {id:3, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-3},
+            {id:4, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-3},
+            {id:5, descripcion:'Entrada', fecha:"28/08/2025", cantidad:14},
+            {id:6, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-5}
+        ]
+        valores.valores.entradasalida= entradasalida;
+        return valores
     }
     return state.cargando ? <Cargando open={true}/> :(
         <TablaMultiple
@@ -59,12 +64,13 @@ export default function Usuarios(props) {
             Condiciones={Condiciones}
             Columnas={2}
             Config={Ver_Valores()}
-            Form_origen = {Form_todos(`Form_User_api`)}
-            Titulo_tabla={"Usuarios"}
-            Table={`${Ver_Valores().app}_User_api`}
+            Form_origen = {Form_todos(`Form_Inventario`)}
+            Titulo_tabla={"Mercancía"}
+            Table={`${Ver_Valores().app}_Mercancia`}
             cargaporparte={{condicion:{}}}
             Titulos_tabla = {state.titulos}
-            Titulo_dialogo ={(dato)=> dato._id  ?  `Usuario ${dato.username}`: `Nuevo Usuario`}
+            Titulo_dialogo ={(dato)=> dato._id  ?  `Producto ${dato.nombre}`: `Nuevo Inventario`}
+            Actualizar_valores ={Actualizar_valores}
         />
     ) 
     

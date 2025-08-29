@@ -189,6 +189,66 @@ export const valores_sistema={
             }
         ]
         },  
+        "Form_Inventario": {
+            "columna": 2,
+            "value": [
+                {
+                    "key": "codigo",
+                    "name": "codigo",
+                    "tipo": "input",
+                    "placeholder": "Código del Producto",
+                    "title": "Código del Producto",
+                    "mensaje_error": "Indique el código del producto",
+                    "required": true
+                },
+                {
+                    "key": "nombre",
+                    "name": "nombre",
+                    "tipo": "input",
+                    "placeholder": "Nombre del Producto",
+                    "title": "Nombre del Producto",
+                    "mensaje_error": "Indique nombre del producto",
+                    "required": true
+                },
+                {
+                    "key": "descripcion",
+                    "nombre": "descripcion",
+                    "tipo": "multiline",
+                    "label": "Descripción",
+                    "placeholder": "Descripción del Producto",
+                    "title": "Descripción del Producto",
+                    "disabled": false,
+                    "getOptionLabel": [
+                        "titulo"
+                    ],
+                    "agregar": false,
+                    "name": "descripcion",
+                    "multiline": true,
+                    "maxRows": "3"
+                },
+                {
+                    "nombre": "entradasalida",
+                    "tipo": "Tabla",
+                    "label": "Entradas / Salidas",
+                    "placeholder": "Entradas / Salidas",
+                    "title": "Entradas / Salidas",
+                    "mensaje_error": "",
+                    "disabled": true,
+                    "numberOfLines": "",
+                    "getOptionLabel": [
+                        "titulo"
+                    ],
+                    "key": "entradasalida",
+                    "name": "entradasalida",
+                    "multiline": false,
+                    "titulos": "Titulos_entrada_salida",
+                    "Subtotal": "Subtotal_entrada_salida",
+                    "nopaginar":true,
+                    "noeliminar":true,
+                    "style":{height:300}
+                }
+            ]
+        },  
     
     },
     "Listas": {
@@ -410,119 +470,222 @@ export const valores_sistema={
     },
     "Titulos": {
       
-      "Titulos_Formaspago": [
-        {
-            "title": "Forma de Pago",
-            "field": "titulo",
-            "tipo": "",
-            "formato": "",
-            "default": "",
-            "type": ""
-        },
-        {
-            "title": "Moneda",
-            "field": "moneda",
-            "tipo": "",
-            "default": "Bs",
-            "formato": "(dato)=>{let valor = dato.field && dato.row && ['efectivodolar','zelle'].indexOf(dato.row.value)!==-1 ? '$' : 'Bs'; if(dato.field && dato.row && dato.row.value==='otro'){valor=dato.row.moneda}; return valor}",
-            "type": "singleSelect1",
-            "valueOptions": ["Bs", "$"],
-            "editable": true,
-            "modificar":true
-        },            
-        {
-            "title": "Banco Origen",
-            "field": "bancoo",
-            "tipo": "",
-            "formato": "",
-            "default": "",
-            "type": "singleSelect1",
-            "valueOptions": "lista_bancos",
-            "getOptionLabel": [
-                "titulo"
-            ],
-            "editable": true,
-            "modificar":true
-        },
-        {
-            "title": "Banco Destino",
-            "field": "bancod",
-            "tipo": "",
-            "formato": "",
-            "default": "",
-            "type": "singleSelect1",
-            "valueOptions": "uecla_Cuenta",
-            "getOptionLabel": [
-                "banco.titulo"
-            ],
-            "editable": true,
-            "modificar":true
-        },
-        {
-            "title": "Referencia",
-            "field": "referencia",
-            "tipo": "",
-            "formato": "",
-            "default": "",
-            "type": "",
-            "editable": true,
-            "modificar":true,
-            "verificar":true,
-            "tabla_verificar":"uecla_Referencia",
-            "campo_verificar":"valores.referencia",
-            "mensaje_verificar":"Verifica si se encuentra registrada la referencia",
-            "mensaje_verificar_error": "Referecia utilizada en recibo: ",
-            "mensaje_verificar_ok":"Referencia no se encuentra registrada",
-            "mensaje_recomienda":"Enviado por WhatsApp",
-            "formato_mensaje_recomienda":"Mensaje_recomienda"
-        },
-        {
-            "title": "Fecha",
-            "field": "fecha",
-            "tipo": "Fecha",
-            "formato": "",
-            "default": "actual",
-            "type": "",
-            "editable": true,
-            "modificar":true
-        },
-        {
-            "title": "Monto",
-            "field": "monto",
-            "tipo": "moneda",
-            "formato": "",
-            "default": "",
-            "type": "number",
-            "editable": true,
-            "modificar":true,
-            "mensaje_recomienda":"Enviado por WhatsApp",
-            "formato_mensaje_recomienda":"Mensaje_recomienda"
-        }
-      ],
-      
-      "Titulos_User_api": [
-        {
-          "title": "Usuario",
-          "field": "username",
-          "tipo": "",
-          "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.username ? dato.valores.username : ''}`\n}",
-          "default": "",
-          "type": ""
-        },
-        {
-          "title": "Categoria",
-          "field": "categoria",
-          "tipo": "lista_categoria"
-        },
-        {
-          "title": "Nombres",
-          "field": "nombres",
-          "tipo": "",
-          "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.nombre ? dato.valores.nombre : ''}`\n}",
-          "default": "",
-          "type": ""
-        }
-      ],
-      
+        "Titulos_Formaspago": [
+            {
+                "title": "Forma de Pago",
+                "field": "titulo",
+                "tipo": "",
+                "formato": "",
+                "default": "",
+                "type": ""
+            },
+            {
+                "title": "Moneda",
+                "field": "moneda",
+                "tipo": "",
+                "default": "Bs",
+                "formato": "(dato)=>{let valor = dato.field && dato.row && ['efectivodolar','zelle'].indexOf(dato.row.value)!==-1 ? '$' : 'Bs'; if(dato.field && dato.row && dato.row.value==='otro'){valor=dato.row.moneda}; return valor}",
+                "type": "singleSelect1",
+                "valueOptions": ["Bs", "$"],
+                "editable": true,
+                "modificar":true
+            },            
+            {
+                "title": "Banco Origen",
+                "field": "bancoo",
+                "tipo": "",
+                "formato": "",
+                "default": "",
+                "type": "singleSelect1",
+                "valueOptions": "lista_bancos",
+                "getOptionLabel": [
+                    "titulo"
+                ],
+                "editable": true,
+                "modificar":true
+            },
+            {
+                "title": "Banco Destino",
+                "field": "bancod",
+                "tipo": "",
+                "formato": "",
+                "default": "",
+                "type": "singleSelect1",
+                "valueOptions": "uecla_Cuenta",
+                "getOptionLabel": [
+                    "banco.titulo"
+                ],
+                "editable": true,
+                "modificar":true
+            },
+            {
+                "title": "Referencia",
+                "field": "referencia",
+                "tipo": "",
+                "formato": "",
+                "default": "",
+                "type": "",
+                "editable": true,
+                "modificar":true,
+                "verificar":true,
+                "tabla_verificar":"uecla_Referencia",
+                "campo_verificar":"valores.referencia",
+                "mensaje_verificar":"Verifica si se encuentra registrada la referencia",
+                "mensaje_verificar_error": "Referecia utilizada en recibo: ",
+                "mensaje_verificar_ok":"Referencia no se encuentra registrada",
+                "mensaje_recomienda":"Enviado por WhatsApp",
+                "formato_mensaje_recomienda":"Mensaje_recomienda"
+            },
+            {
+                "title": "Fecha",
+                "field": "fecha",
+                "tipo": "Fecha",
+                "formato": "",
+                "default": "actual",
+                "type": "",
+                "editable": true,
+                "modificar":true
+            },
+            {
+                "title": "Monto",
+                "field": "monto",
+                "tipo": "moneda",
+                "formato": "",
+                "default": "",
+                "type": "number",
+                "editable": true,
+                "modificar":true,
+                "mensaje_recomienda":"Enviado por WhatsApp",
+                "formato_mensaje_recomienda":"Mensaje_recomienda"
+            }
+        ],
+        
+        "Titulos_User_api": [
+            {
+                "title": "Usuario",
+                "field": "username",
+                "tipo": "",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.username ? dato.valores.username : ''}`\n}",
+                "default": "",
+                "type": ""
+            },
+            {
+                "title": "Categoria",
+                "field": "categoria",
+                "tipo": "lista_categoria"
+            },
+            {
+                "title": "Nombres",
+                "field": "nombres",
+                "tipo": "",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.nombre ? dato.valores.nombre : ''}`\n}",
+                "default": "",
+                "type": ""
+            }
+        ],
+
+        "Titulos_Inventario": [
+            {
+                "title": "Código",
+                "field": "codigo",
+                "tipo": "",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.codigo ? dato.valores.codigo : ''}`\n}",
+                "default": "",
+                "type": ""
+            },
+            {
+                "title": "Nombre",
+                "field": "nombre",
+                "tipo": "",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.nombre ? dato.valores.nombre : ''}`\n}",
+                "default": "",
+                "type": ""
+            },
+            {
+                "title": "Descripción",
+                "field": "descripcion",
+                "tipo": "",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.descripcion ? dato.valores.descripcion : ''}`\n}",
+                "default": "",
+                "type": ""
+            },
+            {
+                "title": "Cantidad Total",
+                "field": "cantidad",
+                "tipo": "",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.cantidad ? dato.valores.cantidad : ''}`\n}",
+                "default": "",
+                "type": ""
+            }
+        ],
+        "Titulos_entrada_salida": [
+            {
+                "title": "Id",
+                "field": "id",
+                "tipo": "",
+                "formato": "",
+                "default": "",
+                "type": "",
+                "width": 50,
+                "flex": 1
+            },
+            {
+                "title": "Fecha",
+                "field": "fecha",
+                "tipo": "",
+                "formato": "",
+                "default": "",
+                "type": "",
+                "width": 170,
+                "flex": 2
+            },
+            {
+                "title": "Descripción",
+                "field": "descripcion",
+                "tipo": "",
+                "formato": "",
+                "default": "",
+                "type": "",
+                "width": 340,
+                "flex": 7
+            },
+            {
+                "title": "Cantidad",
+                "field": "cantidad",
+                "tipo": "",
+                "formato": "",
+                "default": "",
+                "type": "number",
+                "flex": 2
+            }
+        ],
     },
+    "Subtotales":{
+        "Subtotal_entrada_salida":[
+            [
+                {"title":"Entradas"},
+                {
+                    "title": "",
+                    "field": "entradas",
+                    "default": 0,
+                    "formato": "Subtotal_entrada",
+                    "formato_anterior": "(dato, resultado)=> {console.log('...', dato, resultado) return (dato.value==='cantidad' ? dato.cantidad + Number(resultado.cantidad) : Number(resultado.cantidad))}"
+                },
+                {"title":"Salidas"},
+                {
+                    "title": "",
+                    "field": "salidas",
+                    "default": 0,
+                    "formato": "Subtotal_salida",
+                },
+                {"title":"Total"},
+                {
+                    "title": "",
+                    "field": "total",
+                    "default": 0,
+                    "formato": "Subtotal_entrada_salida",
+                }
+            ]
+        ]
+    }
 }
