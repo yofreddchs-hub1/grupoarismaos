@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { Ver_Valores, conexiones } from '../../comunes';
+import { Funciones_Especiales, Ver_Valores, conexiones } from '../../comunes';
 // function sleep(delay = 0) {
 //   return new Promise((resolve) => {
 //     setTimeout(resolve, delay);
@@ -92,7 +92,7 @@ export default function Listados(props) {
                 :   (typeof valor.value ==='string' || typeof valor.value === 'number') && valor.lista[valor.value]!==undefined
                 ?   valor.lista[valor.value]
                 :   valor.value
-                
+          
   return (
     <Autocomplete
       multiple={valor.multiple}
@@ -137,8 +137,7 @@ export default function Listados(props) {
       id={'select-'+valor.name}
       autoComplete
       
-      value={dato
-      }
+      value={dato}
       // inputValue={ valor.value=== undefined ? '' : valor.value.titulo}
       isOptionEqualToValue={(option, value) => {
         // console.log(option, value)
@@ -146,7 +145,7 @@ export default function Listados(props) {
       }}
       noOptionsText='No hay opciones'
       onChange={(event, newValue) => {
-        // console.log(newValue)
+        //  console.log(newValue)
         // if (newValue!==null){
           // console.log(newValue, dato, valor)
           let nuevo = newValue;
@@ -155,6 +154,20 @@ export default function Listados(props) {
           }
           values.Cambio({target:{name:valor.name, value:nuevo}})
         // }
+      }}
+      onKeyDown={async(event) => {
+        if (event.key === 'Enter') {
+          // Prevent's default 'Enter' behavior.
+          event.defaultMuiPrevented = true;
+          // your handler code
+          if (valor.onKeyDown){
+            let formato = Funciones_Especiales(valor.onKeyDown);
+            let resultado= await formato(event.target.value, valor);
+            
+            if (resultado!==null)
+              values.Cambio({target:{name:valor.name, value:resultado}})
+          }
+        }
       }}
       label={valor.label ? valor.label : valor.placeholder}
 
@@ -190,6 +203,7 @@ export default function Listados(props) {
           }}
           
           name={valor.name}
+          
           InputProps={{
             ...params.InputProps,
             endAdornment: (

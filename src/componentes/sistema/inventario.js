@@ -65,11 +65,11 @@ export default function Inventario(props) {
             Columnas={2}
             Config={Ver_Valores()}
             Form_origen = {Form_todos(`Form_Inventario`)}
-            Titulo_tabla={"Mercancía"}
+            Titulo_tabla={"Productos"}
             Table={`${Ver_Valores().app}_Mercancia`}
             cargaporparte={{condicion:{}}}
             Titulos_tabla = {state.titulos}
-            Titulo_dialogo ={(dato)=> dato._id  ?  `Producto ${dato.nombre}`: `Nuevo Inventario`}
+            Titulo_dialogo ={(dato)=> dato._id  ?  `Producto "${dato.nombre}"`: `Nuevo Producto`}
             Actualizar_valores ={Actualizar_valores}
         />
     ) 

@@ -6,9 +6,9 @@ export const Ver_Valores = ()=>{
 export const nuevo_Valores = (nuevo)=>{
     Valores={...Valores, ...nuevo}
 }
-
+const app = 'grupoarismaos';
 export const valores_sistema={
-    app:"grupoarismaos",
+    app,
     http1:"http://192.168.10.13:5005",
     http:"http://205.209.116.101:5005",
     "Estilos": {
@@ -195,7 +195,7 @@ export const valores_sistema={
                 {
                     "key": "codigo",
                     "name": "codigo",
-                    "tipo": "input",
+                    "tipo": "codigo",
                     "placeholder": "Código del Producto",
                     "title": "Código del Producto",
                     "mensaje_error": "Indique el código del producto",
@@ -209,6 +209,16 @@ export const valores_sistema={
                     "title": "Nombre del Producto",
                     "mensaje_error": "Indique nombre del producto",
                     "required": true
+                },
+                {
+                    "key": "stock",
+                    "name": "stock",
+                    "tipo": "number",
+                    "placeholder": "Stock Minimo",
+                    "title": "Stock Minimo",
+                    "mensaje_error": "Indique nombre del producto",
+                    "default":1,
+                    "required": false
                 },
                 {
                     "key": "descripcion",
@@ -249,7 +259,71 @@ export const valores_sistema={
                 }
             ]
         },  
-    
+        "Form_Ingresos": {
+            "columna": 3,
+            "value": [
+                {
+                    "nombre": "fecha",
+                    "tipo": "Fecha",
+                    "label": "Dia",
+                    "placeholder": "Dia",
+                    "title": "Dia",
+                    "mensaje_error": "",
+                    "disabled": false,
+                    "numberOfLines": "",
+                    "getOptionLabel": [
+                        "titulo"
+                    ],
+                    "key": "fecha",
+                    "name": "fecha",
+                    "multiline": false
+                },
+                {
+                    "key": "numero",
+                    "name": "numero",
+                    "tipo": "input",
+                    "placeholder": "Numero de Factura",
+                    "title": "Numero de Factura",
+                    "mensaje_error": "Indique el Numero de factura",
+                    "required": true
+                },
+                {
+                    "key": "movimietno",
+                    "name": "movimiento",
+                    "label": " ",
+                    "tipo": "Tabla",
+                    "titulos": "Titulos_es_producto",
+                    "form":"Form_es_productos",
+                    "nopaginar": true,
+                    "style": {
+                        "height": 300
+                    }
+                }
+            ]
+        },
+        "Form_es_productos": {
+          "columna": 1,
+          "value": [
+              {
+                  "nombre": "select_a",
+                  "tipo": "lista_multiuso",
+                  "label": "Seleccione Producto",
+                  "placeholder": "Seleccione Producto",
+                  "title": "Seleccione Producto",
+                  "mensaje_error": "",
+                  "disabled": false,
+                  "numberOfLines": "",
+                  "lista": `${app}_Mercancia`,
+                  "getOptionLabel": [
+                      "codigo",
+                      "descripcion"
+                  ],
+                  "key": "select_a",
+                  "name": "select_a",
+                  "onKeyDown":"Buscar_producto"
+              }
+          ]
+        },
     },
     "Listas": {
         "lista_categoria": [
@@ -659,6 +733,35 @@ export const valores_sistema={
                 "flex": 2
             }
         ],
+        "Titulos_es_producto": [
+          {
+              "title": "Código",
+              "field": "codigo",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "",
+              "flex": 0.25 
+          },
+          {
+              "title": "Descripción",
+              "field": "descripcion",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "",
+              "flex": 3 
+          },
+          {
+              "title": "Cantidad",
+              "field": "cantidad",
+              "tipo": "",
+              "formato": "(dato)=> {\nlet cantidad = Number(`${dato && dato.cantidad ? dato.cantidad : 0}`); \nreturn cantidad\n}",
+              "default": "",
+              "type": "number",
+              "editable": true
+          }
+      ],
     },
     "Subtotales":{
         "Subtotal_entrada_salida":[

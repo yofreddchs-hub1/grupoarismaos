@@ -10,6 +10,7 @@ import Usuarios from './usuarios';
 import Login from '../login';
 import HomePage from './inicio';
 import Inventario from './inventario';
+import Entradas from './entradas';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -41,6 +42,8 @@ export default function Sistema(props) {
     <div>{
             activo && activo==="inicio"
             ?   <HomePage />
+            :   activo && activo==="entrada"
+            ?   <Entradas />
             :   activo && activo==="inventario"
             ?   <Inventario />
             :   activo && activo==="usuarios"

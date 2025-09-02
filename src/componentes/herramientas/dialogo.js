@@ -68,7 +68,7 @@ export default function Dialogo(props) {
   // const [open, setOpen] = React.useState(false);
   let {open, Cerrar, Titulo, Cuerpo, Botones, tam, fullScreen, config, fullWidth}= props;
   
-  config = config.Estilos ? config : Ver_Valores().config;
+  config = config && config.Estilos ? config : Ver_Valores();
   // const handleClickOpen = () => {
   //   // setOpen(true);
   // };

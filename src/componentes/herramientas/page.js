@@ -36,16 +36,20 @@ import Alert from '@mui/material/Alert';
 // import esLocale from 'date-fns/locale/es';
 // import MobileDatePicker from '@mui/lab/MobileDatePicker';
 // import { MobileDatePicker } from '@mui/x-date-pickers';
-import { LocalizationProvider  } from '@mui/x-date-pickers';
 // import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 // import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { LocalizationProvider  } from '@mui/x-date-pickers';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import Lista from './lista';
 import ListaRepresentados from './lista_representados';
 import TipoJson from './tipojson';
-// import moment from "moment";
+import moment from "moment";
 
 import { Ver_Valores, Filtrar_campos, Funciones_Especiales, Generar_id } from '../../comunes';
 import Tabla from './tablaeditar';
@@ -237,7 +241,7 @@ const useStyles = {//makeStyles({
 
 const Entrada = (props)=>{
     
-    const Config= props.config ? props.config : Ver_Valores().config;
+    const Config= props.config ? props.config : Ver_Valores();
     const estos = Object.keys(props).filter(f=> 
       ['helperText', 'margin', 'no_modificar','no_mostrar', 'Subtotal', 'getOptionLabel', 'getOptionSelected', 'agregar', 'comparar'].indexOf(f)===-1)
     let permitidos={}
@@ -254,7 +258,7 @@ const Entrada = (props)=>{
                     alignContent:'end',
                     paddingBottom:10,
         }}>
-            <InputLabel style={{color:'#fff', textAlign:'left', ...Config.Estilos.Input_label ? Config.Estilos.Input_label : {}}}
+            <InputLabel style={{color:'#fff', textAlign:'left', ...Config && Config.Estilos.Input_label ? Config.Estilos.Input_label : {}}}
             >
                 {props.label}
             </InputLabel>
@@ -522,7 +526,7 @@ export default function Page(props) {
     ): ['select', 'Lista'].indexOf(valor.tipo)!==-1 ? (
       <div style={{}}>
         <div style={{ display: 'flex', flexDirection:'row', paddingTop:5}}>
-          <Autocomplete valor={valor} values={values} Config={Config}/>
+          <Autocomplete valor={valor} values={values} Config={Config ? Config : Ver_Valores()}/>
           {valor.agregar 
             ? <IconButton title='Agregar sub-titulo'      
                 style={{ marginLeft:10}}
@@ -708,12 +712,18 @@ export default function Page(props) {
         <MobileDatePicker
           {...valor}
           label={valor.label}
-          value={valor.value}
+          value={valor.value ? valor.value : moment()}
           className={valorEstilo}
           onChange={(newValue) => {
             values.Cambio({target:{name:valor.name, value:newValue['$d']}});
           }}
-          renderInput={(params) => <Entrada {...params} tipo={valor.value ? '' : 'Fecha'} config={Config}/>}
+          // slots={{
+          //   textField: (params) => <Entrada {...params}  tipo={valor.value ? '' : 'Fecha'} config={Config}/>
+          // }}
+          
+          
+          key={valor.key}
+          
         />
       </LocalizationProvider>
       
@@ -783,7 +793,7 @@ export default function Page(props) {
                 ? <CircularProgress  size={20}
                     thickness={5}
                   />
-                : <Icon sx={{marginLeft:-5,...Config.Estilos.Input_icono ? Config.Estilos.Input_icono : {}}}>
+                : <Icon sx={{marginLeft:-5,...Config && Config.Estilos.Input_icono ? Config.Estilos.Input_icono : {}}}>
                     manage_search
                   </Icon> }
             </div>

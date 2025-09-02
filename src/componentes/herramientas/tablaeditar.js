@@ -192,14 +192,16 @@ export default function AntDesignGrid(props) {
     let nuevos = await genera_formulario({valores:{}, campos: Form_todos(`${props.enformulario.Form ? props.enformulario.Form : props.enformulario.form}`) })
     
     nuevos.titulos.select_a.lista= props.enformulario && props.enformulario.lista ? props.enformulario.lista : nuevos.titulos.select_a.lista;
-    if(nuevos.titulos.select_a)
+    if(nuevos.titulos.select_a){
       nuevos.titulos.select_a.onChange=props.enformulario.onChange;
+    
+    }
     let formulario ={
       ...nuevos,
     }
     setSeleccion(
       <div style={{marginTop:-25, marginBottom:-35}}>
-        <Formulario {...formulario}/>
+        <Formulario {...formulario} Config={Config}/>
       </div>
     )
   }
@@ -516,7 +518,7 @@ export default function AntDesignGrid(props) {
         <Typography variant={window.innerWidth > 750 ? "h6" : "subtitle1"} gutterBottom component="div" sx={{textAlign:'left',...Config ? {color:Config.Estilos.Input_label}: {}}}>
           {Titulo ? Titulo : 'Titulo'}
         </Typography>
-        <div style={{width:window.innerWidth > 750 ? '45%' : '100%'}}>
+        <div style={{width:window.innerWidth > 750 ? '45%' : '100%', marginBottom:10}}>
           {Seleccion}
         </div>
         {props.enformulario && props.agregartodos
@@ -676,7 +678,7 @@ export default function AntDesignGrid(props) {
               tam:'xs',
               Titulo:title,
               Cuerpo: <div style={{}}>
-                        <Formulario {...formulario}/>
+                        <Formulario {...formulario} Config={Config}/>
                       </div>,
               Cerrar: ()=>{
                 setDialogo({...dialogo,open:false});
@@ -755,7 +757,7 @@ const SubTotales= (props) =>{
     return ig
   }
   const Calcular =(valor)=>{
-   console.log('Por calcular>>>>>>>>', valor, modificado,externos[name+'-subtotal'])
+  //  console.log('Por calcular>>>>>>>>', valor, modificado,externos[name+'-subtotal'])
     
     props.Subtotal.map(val=>{
       val.map(col=>{

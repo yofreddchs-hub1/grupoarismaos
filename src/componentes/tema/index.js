@@ -10,6 +10,7 @@ import Sindatos from '../../../public/imagenes/sindatos.svg';
 import Encontruccion from '../../../public/imagenes/enconstruccion.png';
 import Salir from '../../../public/imagenes/salir.svg';
 import Inventario from '../../../public/imagenes/inventario.svg';
+import Entrada from '../../../public/imagenes/entradas.svg';
 export const imagenes={
   Logo,
   Usuarios,
@@ -17,6 +18,7 @@ export const imagenes={
   Sindatos,
   Encontruccion,
   Inventario,
+  Entrada,
   Salir
 }
 const fondo = "#f8dcf0";

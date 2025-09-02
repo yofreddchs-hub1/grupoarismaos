@@ -59,6 +59,11 @@ export default function Home() {
             activo:true
           },
           {
+            imagen: imagenes.Entrada,
+            label:"Entrada",
+            value:'entrada',
+          },
+          {
             imagen: imagenes.Inventario,
             label:"Inventario",
             value:'inventario',

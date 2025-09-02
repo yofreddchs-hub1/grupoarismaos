@@ -103,7 +103,7 @@ const Dar_formato =(Form)=>{
 }
 
 export const Funciones_Especiales = (funcion) =>{
-    // console.log(funcion)
+    //console.log(funcion)
     let formato;
     try{
         formato = eval(funcion);

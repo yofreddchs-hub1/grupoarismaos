@@ -5,7 +5,6 @@ import Link from '@mui/material/Link';
 
 export default{
     Subtotal_entrada:(dato,resultado)=>{
-        console.log(dato, resultado);
         if (Number(dato.cantidad)>0)
                 return Number(dato.cantidad)+ resultado.entradas
         return resultado.entradas;
@@ -19,6 +18,24 @@ export default{
         
         return Number(dato.cantidad)+ resultado.total
         
+    },
+    Buscar_producto:async(value, valor )=>{
+        let resulta= await conexiones.Leer_C([valor.table],{
+            [`${valor.table}`]:{'valores.codigo':value}
+        });
+        
+        let resultado=null;
+        if (resulta.Respuesta==='Ok'){
+            let resul= resulta.datos[valor.table].filter(f=> f.valores.codigo===value).map(val=>{
+                delete val.valores['entradasalida-subtotal']
+                return {_id:val._id, ...val.valores}
+            })
+            if (resul.length!==0){
+                resultado = resul[0];
+            }
+            
+        }
+        return resultado; 
     },
     //////////////////
     Editores_formapago:(params)=>{
