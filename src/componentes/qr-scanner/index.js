@@ -9,19 +9,24 @@ function QRScanner(props) {
 
   useEffect(() => {
     html5QrCode = new Html5Qrcode("reader");
+    if (props.open)
+        setTimeout(handleClickAdvanced, 300);
     
+    return ()=>{
+        handleStop();
+    }
   }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   const handleClickAdvanced = () => {
     const qrCodeSuccessCallback = (decodedText, decodedResult) => {
       if ( props.onResult) props.onResult(decodedText);
-      Swal.fire(respuesta)
+      
       activarSonido();
       handleStop();
     };
     html5QrCode.start(
       { facingMode: "environment" },
-      props.type === "QR" ? brConfig : qrConfig,
+      props.type === "QR" ? qrConfig : brConfig,
       qrCodeSuccessCallback
     );
   };
@@ -47,10 +52,17 @@ function QRScanner(props) {
   return (
     <div style={{ position: "relative" }}>
       <div id="reader" width="100%" />
-      <button onClick={() => handleClickAdvanced()}>
-        click pro {props.type ? props.type : "Camara"}
-      </button>
-      <button onClick={() => handleStop()}>stop pro</button>
+      {!props.open
+        ?   <button onClick={() => handleClickAdvanced()}>
+                click pro {props.type ? props.type : "Camara"}
+            </button>
+        :   null
+      }
+      
+      {!props.open
+        ?   <button onClick={() => handleStop()}>stop pro</button>
+        :   null
+      }
       <audio id="audioScaner" src="/sonidos/sonido.mp3"></audio>
     </div>
   );

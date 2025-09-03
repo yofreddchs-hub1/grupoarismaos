@@ -9,6 +9,7 @@ import Dialogo from './dialogo';
 import Page from './page';
 import { Titulo_default,Form_todos, Ver_Valores, genera_formulario, crear_campos, Permiso, conexiones, nuevo_Valores } from '../../comunes';
 import funcionesespeciales from '../../comunes/fespeciales';
+import QRScanner from '../qr-scanner';
 //Utilizado para la creacion de formulacios con distintos datos
 //formato de los datos
 // formulario= {
@@ -312,7 +313,8 @@ class Formulario extends Component {
                    Agregar, Agregar_formulario: this.Agregar_formulario,
                    Remover_formulario:this.Remover_formulario,
                    Refrescar_agregar:this.Refrescar_agregar,
-                   Form_origen
+                   Form_origen,
+                   CodigoQR:this.CodigoQR
                   });
   }
 
@@ -668,7 +670,21 @@ class Formulario extends Component {
       }
     })
   }
-
+  CodigoQR = (valor)=>{
+    console.log('Por codigoQR', valor);
+    this.setState({dialogo:{ 
+      open: true,
+      tam:'xs',
+      Titulo:'Leer Código',
+      Cuerpo:<QRScanner open type={"QR"} onResult={(resultado)=>{
+        console.log(resultado);
+        this.Cambio({target:{name:valor.name, value:resultado}});
+        this.setState({dialogo:{open:false}})
+      }}/>,
+      Cerrar: ()=>this.setState({dialogo:{open:false}}),
+      }
+    })
+  }
   render(){
     
     return (

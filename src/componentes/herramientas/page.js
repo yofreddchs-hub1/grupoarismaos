@@ -289,7 +289,7 @@ const Entrada = (props)=>{
                         : {},
                       ...permitidos.style ? permitidos.style : {}
                     }}
-                    endAdornment={(props.tipo==='password' || props.modificar) && !props.sinicono ?
+                    endAdornment={(props.tipo==='codigo' || props.tipo==='password' || props.modificar) && !props.sinicono ?
                         props.endAdornment : null
                     }
                 >
@@ -789,7 +789,21 @@ export default function Page(props) {
           config={Config}
           endAdornment={
             <div style={{ marginRight:-3}}>
-              {valor.buscando 
+              {valor.tipo==='codigo'
+                ? <IconButton
+                    onClick={()=>{
+                      console.log('por aqui')
+                      values.CodigoQR(valor);
+                    }}
+                    // onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                    sx={{ marginLeft:-8}}
+                  >
+                    <Icon sx={{ ...Config && Config.Estilos.Input_icono ? Config.Estilos.Input_icono : {}}}>
+                      qr_code_scanner
+                    </Icon>
+                  </IconButton>
+                : valor.buscando 
                 ? <CircularProgress  size={20}
                     thickness={5}
                   />
