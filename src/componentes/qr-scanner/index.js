@@ -51,7 +51,10 @@ const QrScanner = (props) => {
     canvasElement.hidden = true;
     btnScanQR.hidden = false;
   };
-
+  const activarSonido = () => {
+    var audio = document.getElementById('audioScaner');
+    audio.play();
+  }
   useEffect(() => {
     const vid = document.createElement("video");
     setVideo(vid);
@@ -128,6 +131,7 @@ const QrScanner = (props) => {
           <button className="btn btn-danger btn-sm rounded-3" onClick={cerrarCamara}>Detener camara</button>
         </div>
       </div>
+      <audio id="audioScaner" src="/sonidos/sonido.mp3"></audio>
     </div>
 
   );
