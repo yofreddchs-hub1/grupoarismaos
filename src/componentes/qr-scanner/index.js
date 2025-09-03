@@ -15,11 +15,13 @@ function QRScanner(props) {
   const handleClickAdvanced = () => {
     const qrCodeSuccessCallback = (decodedText, decodedResult) => {
       if ( props.onResult) props.onResult(decodedText);
+      Swal.fire(respuesta)
+      activarSonido();
       handleStop();
     };
     html5QrCode.start(
       { facingMode: "environment" },
-      props.type === "QR" ? qrConfig : brConfig,
+      props.type === "QR" ? brConfig : qrConfig,
       qrCodeSuccessCallback
     );
   };
@@ -37,6 +39,10 @@ function QRScanner(props) {
       console.log(err);
     }
   };
+  const activarSonido = () => {
+    var audio = document.getElementById('audioScaner');
+    audio.play();
+  }
 
   return (
     <div style={{ position: "relative" }}>
@@ -45,6 +51,7 @@ function QRScanner(props) {
         click pro {props.type ? props.type : "Camara"}
       </button>
       <button onClick={() => handleStop()}>stop pro</button>
+      <audio id="audioScaner" src="/sonidos/sonido.mp3"></audio>
     </div>
   );
 }
