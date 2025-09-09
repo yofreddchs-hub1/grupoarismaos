@@ -19,9 +19,8 @@ function QRScanner(props) {
 
   const handleClickAdvanced = () => {
     const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-      if ( props.onResult) props.onResult(decodedText);
-      
       activarSonido();
+      if ( props.onResult) props.onResult(decodedText);
       handleStop();
     };
     html5QrCode.start(

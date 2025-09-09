@@ -1,10 +1,10 @@
-import QrScanner from '../qr-scanner'; // Ajusta la ruta según tu estructura de archivos
+import QrScanner from '../qr-scanner/index1'; // Ajusta la ruta según tu estructura de archivos
 
 const HomePage = () => {
   return (
     <div>
-      <h1>Mi Escáner de Código QR</h1>
-      <QrScanner />
+      <h1>Dashboard</h1>
+      
     </div>
   );
 };

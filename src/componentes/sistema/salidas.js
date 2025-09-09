@@ -1,7 +1,11 @@
 import {  useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-
+import Grid from '@mui/material/Grid';
+import Image from 'next/image';
+import { letramenu,colores} from '../tema';
+import { Typography } from '@mui/material';
+import TablaMultiple from '../herramientas/tabla/tabla_multiple';
 import { Titulos_todos, Ver_Valores, Form_todos } from '@/src/comunes';
 import Cargando from '../cargar/cargaajustable';
 import { conexiones, genera_formulario } from '../../comunes';
@@ -21,7 +25,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-export default function Entradas(props) {
+export default function Salidas(props) {
   //============================================
     const tabla=Ver_Valores().database.ingreso; // tabla de ingresos
     const tablad=Ver_Valores().database.movimiento; // tabla de detalle de dentrada o salida
@@ -34,11 +38,11 @@ export default function Entradas(props) {
     
     const Guardar = async(valores) =>{
       let {fecha, numero, tipo,movimiento}= valores;
-      let referencia = await conexiones.Serial({tabla:tabla,id:'EP', cantidad:8})
+      let referencia = await conexiones.Serial({tabla:tabla,id:'SP', cantidad:8})
       referencia= referencia.Recibo;
-      
+      console.log(referencia)
       fecha= fecha==="" ? moment() : moment(fecha);
-      
+      console.log(movimiento, tipo);
       let entradas = [];
       const respuesta = await conexiones.Guardar({valores:{referencia, fecha, numero, tipo,movimiento}, multiples_valores:true}, tabla)
       console.log(respuesta)
@@ -52,8 +56,8 @@ export default function Entradas(props) {
           fecha,
           numerocontrol:numero,
           tipo:tipo,
-          descripcion:`Entrada por ${tipo.titulo}${tipo._id===3 ? '' : `, numero de control ${numero}`}, de ${movimi.nombre}, cantidad: ${movimi.cantidad}`,
-          cantidad:Number(movimi.cantidad),
+          descripcion:`Salida por ${tipo.titulo}${tipo._id===0 ? `, numero de control ${numero}` : ''}, de ${movimi.nombre}, cantidad: ${movimi.cantidad}`,
+          cantidad:-1 * Number(movimi.cantidad),
           monto:Number(movimi.monto),
           costou: movimi.cantidad && movimi.monto ? Number(movimi.monto)/Number(movimi.cantidad) : 0,
           referencia:referencia,
@@ -72,14 +76,14 @@ export default function Entradas(props) {
     useEffect(() => {
       const cargar = async()=>{
             let titulos = await Titulos_todos(`Titulos_Inventario`);
-            let nuevo = await genera_formulario({valores:{},campos:Form_todos('Form_Ingresos')});
+            let nuevo = await genera_formulario({valores:{},campos:Form_todos('Form_Salidas')});
             
             nuevo.titulos[3].value.movimiento.style={
               height: alto * 0.3
             }
             nuevo.botones=[
               {
-                name:'ingresar', label:Egresar ? 'Egresar' : 'Ingresar', title: Egresar ? 'Egresar datos al sistema' : 'Ingresar datos al sistema',
+                name:'ingresar', label:'Egresar', title: 'Egresar producto de inventario' ,
                 variant:"contained", color:"success", 
                 onClick: Guardar, validar:'true', 
                 sx:{...Ver_Valores().Estilos.Botones.Aceptar},
@@ -102,9 +106,11 @@ export default function Entradas(props) {
         return valores
     }
     return state.cargando ? <Cargando open={true} height={alto *0.8}/> :(
-      <Scrollbars sx={{ height:alto * 0.8, flexGrow: 1, padding:0.5, ...Ver_Valores().Estilos.Dialogo_cuerpo ? Ver_Valores().Estilos.Dialogo_cuerpo :{}}}>
-        <Formulario {...state.formulario} Config={Ver_Valores()} />
-      </Scrollbars>
+        
+        <Scrollbars sx={{ height:alto * 0.8, flexGrow: 1, padding:0.5, ...Ver_Valores().Estilos.Dialogo_cuerpo ? Ver_Valores().Estilos.Dialogo_cuerpo :{}}}>
+            <Formulario {...state.formulario} Config={Ver_Valores()} />
+        </Scrollbars>
+        
     ) 
     
   ;

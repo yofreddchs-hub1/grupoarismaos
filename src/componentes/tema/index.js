@@ -11,6 +11,9 @@ import Encontruccion from '../../../public/imagenes/enconstruccion.png';
 import Salir from '../../../public/imagenes/salir.svg';
 import Inventario from '../../../public/imagenes/inventario.svg';
 import Entrada from '../../../public/imagenes/entradas.svg';
+import Salida from '../../../public/imagenes/salidas.svg';
+import Proveedores from '../../../public/imagenes/proveedores.svg';
+import Clientes from '../../../public/imagenes/clientes.svg';
 export const imagenes={
   Logo,
   Usuarios,
@@ -19,6 +22,9 @@ export const imagenes={
   Encontruccion,
   Inventario,
   Entrada,
+  Salida,
+  Proveedores,
+  Clientes,
   Salir
 }
 const fondo = "#f8dcf0";

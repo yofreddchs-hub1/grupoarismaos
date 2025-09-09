@@ -10,7 +10,16 @@ const app = 'grupoarismaos';
 export const valores_sistema={
     app,
     http1:"http://192.168.10.13:5005",
-    http:"http://205.209.116.101:5005",
+    http2:"http://205.209.116.101:5005",
+    http:"https://dev.raqlan.com",
+    database:{
+        usuario:`${app}_User_api`,
+        producto:`${app}_Mercancia`,
+        ingreso:`${app}_Ingreso`,
+        movimiento:`${app}_Movimiento`,
+        proveedor:`${app}_Proveedor`,
+        cliente:`${app}_Cliente`,
+    },
     "Estilos": {
       "Logo": {
           "height": 50,
@@ -211,6 +220,18 @@ export const valores_sistema={
                     "required": true
                 },
                 {
+                    "key": "categoria",
+                    "name": "categoria",
+                    "label": "Categoria Producto",
+                    "tipo": "lista_multiuso",
+                    "lista": "lista_categoria_productos",
+                    "multiple": false,
+                    "getOptionLabel": [
+                        "titulo"
+                    ],
+                    
+                },
+                {
                     "key": "stock",
                     "name": "stock",
                     "tipo": "number",
@@ -263,11 +284,45 @@ export const valores_sistema={
             "columna": 3,
             "value": [
                 {
+                    "nombre": "titulo1",
+                    "tipo": "subtitulo",
+                    "label": "ENTRADAS",
+                    "title": "ENTRADAS",
+                    "name": "titulo1"
+                },
+                {
+                    "key": "tipo",
+                    "name": "tipo",
+                    "label": "Forma de Entrada",
+                    "placeholder": "Forma de Entrada",
+                    "title": "Forma de Entrada",
+                    "tipo": "lista_multiuso",
+                    "lista": "lista_tipo",
+                    "multiple": false,
+                    "getOptionLabel": [
+                        "titulo"
+                    ],
+                    "required": true,
+                    "mensaje_error": "Indique forma de ingresar producto",
+                    "modificar": "Cambio_tipo"
+                },
+                {
+                    "key": "numero",
+                    "name": "numero",
+                    "tipo": "input",
+                    "placeholder": "Numero de Control (Factura / Recibo)",
+                    "title": "Numero de control Factura o recibo",
+                    "mensaje_error": "Indique el numero de control",
+                    "required": true,
+                    "disabled": true,
+                },
+                {
                     "nombre": "fecha",
-                    "tipo": "Fecha",
-                    "label": "Dia",
-                    "placeholder": "Dia",
+                    "tipo": "",
+                    "label": "Fecha",
+                    "placeholder": "Fecha: dia/mes/año",
                     "title": "Dia",
+                    "type":"date",
                     "mensaje_error": "",
                     "disabled": false,
                     "numberOfLines": "",
@@ -279,13 +334,24 @@ export const valores_sistema={
                     "multiline": false
                 },
                 {
-                    "key": "numero",
-                    "name": "numero",
-                    "tipo": "input",
-                    "placeholder": "Numero de Factura",
-                    "title": "Numero de Factura",
-                    "mensaje_error": "Indique el Numero de factura",
-                    "required": true
+                  "nombre": "proveedor",
+                  "tipo": "lista_multiuso",
+                  "label": "Proveedor",
+                  "placeholder": "Proveedor",
+                  "title": "Proveedor",
+                  "required": false,
+                  "mensaje_error": "Debe seleccionar proveedor",
+                  "disabled": false,
+                  "numberOfLines": "",
+                  "lista": `${app}_Proveedor`,
+                  "getOptionLabel": [
+                      "rif",
+                      "nombre"
+                  ],
+                  "agregar": true,
+                  "key": "proveedor",
+                  "name": "proveedor",
+                  "form": "Form_Proveedor"
                 },
                 {
                     "key": "movimietno",
@@ -297,7 +363,98 @@ export const valores_sistema={
                     "nopaginar": true,
                     "style": {
                         "height": 300
-                    }
+                    },
+                    "editables": "Editores_productos",
+                    "required": true,
+                }
+            ]
+        },
+        "Form_Salidas": {
+            "columna": 3,
+            "value": [
+                {
+                    "nombre": "titulo1",
+                    "tipo": "subtitulo",
+                    "label": "SALIDAS",
+                    "title": "SALIDAS",
+                    "name": "titulo1"
+                },
+                {
+                    "key": "tipo",
+                    "name": "tipo",
+                    "label": "Forma de Salida",
+                    "placeholder": "Forma de Salida",
+                    "title": "Forma de Salida",
+                    "tipo": "lista_multiuso",
+                    "lista": "lista_tipo_S",
+                    "multiple": false,
+                    "getOptionLabel": [
+                        "titulo"
+                    ],
+                    "required": true,
+                    "mensaje_error": "Indique forma de retirar producto",
+                    "modificar": "Cambio_tipo_s"
+                },
+                {
+                    "key": "numero",
+                    "name": "numero",
+                    "tipo": "input",
+                    "placeholder": "Numero de Control (Factura / Recibo)",
+                    "title": "Numero de control Factura o recibo",
+                    "mensaje_error": "Indique el numero de control",
+                    "required": true,
+                    "disabled": true,
+                },
+                {
+                    "nombre": "fecha",
+                    "tipo": "",
+                    "label": "Fecha",
+                    "placeholder": "Fecha: dia/mes/año",
+                    "title": "Dia",
+                    "type":"date",
+                    "mensaje_error": "",
+                    "disabled": false,
+                    "numberOfLines": "",
+                    "getOptionLabel": [
+                        "titulo"
+                    ],
+                    "key": "fecha",
+                    "name": "fecha",
+                    "multiline": false
+                },
+                {
+                    "nombre": "cliente",
+                    "tipo": "lista_multiuso",
+                    "label": "Cliente",
+                    "placeholder": "Cliente",
+                    "title": "Cliente",
+                    "required": true,
+                    "mensaje_error": "Debe seleccionar cliente",
+                    "disabled": false,
+                    "numberOfLines": "",
+                    "lista": `${app}_Cliente`,
+                    "getOptionLabel": [
+                        "rif",
+                        "nombre"
+                    ],
+                    "agregar": true,
+                    "key": "cliente",
+                    "name": "cliente",
+                    "form": "Form_Cliente"
+                },
+                {
+                    "key": "movimietno",
+                    "name": "movimiento",
+                    "label": " ",
+                    "tipo": "Tabla",
+                    "titulos": "Titulos_es_producto",
+                    "form":"Form_es_productos",
+                    "nopaginar": true,
+                    "style": {
+                        "height": 300
+                    },
+                    "editables": "Editores_productos",
+                    "required": true,
                 }
             ]
         },
@@ -320,7 +477,128 @@ export const valores_sistema={
                   ],
                   "key": "select_a",
                   "name": "select_a",
-                  "onKeyDown":"Buscar_producto"
+                  "onKeyDown":"Buscar_producto",
+                  "agregar":"codebar"
+              }
+          ]
+        },
+        "Form_Proveedor": {
+          "columna": 2,
+          "value": [
+              {
+                  "key": "rif",
+                  "name": "rif",
+                  "label": "Cedula / Rif",
+                  "tipo": "input",
+                  "mensaje_error": "Indique documento de identidad",
+                  "required": true
+              },
+              {
+                  "key": "nombre",
+                  "name": "nombre",
+                  "label": "Nombre",
+                  "mensaje_error": "Indique nombre del proveedor ",
+                  "required": true
+              },
+              {
+                  "key": "telefono",
+                  "name": "telefono",
+                  "label": "Telefono de contacto"
+              },
+              {
+                  "key": "email",
+                  "name": "email",
+                  "label": "Correo electronico"
+              },
+              {
+                  "key": "direcion",
+                  "name": "direccion",
+                  "label": "Dirección",
+                  "multiline": true,
+                  "numberOfLines": 4
+              },
+              {
+                  "key": "descripcion",
+                  "name": "descripcion",
+                  "label": "Descripción",
+                  "multiline": true,
+                  "numberOfLines": 4
+              },
+              {
+                  "nombre": "codigo",
+                  "tipo": "auto-codigo",
+                  "label": "Código",
+                  "placeholder": "Código",
+                  "title": "Código",
+                  "mensaje_error": "P",
+                  "disabled": true,
+                  "numberOfLines": "",
+                  "getOptionLabel": [
+                      "titulo"
+                  ],
+                  "key": "codigo",
+                  "name": "codigo",
+                  "multiline": false
+              }
+          ]
+        },
+        "Form_Cliente": {
+          "columna": 2,
+          "value": [
+              {
+                  "key": "rif",
+                  "name": "rif",
+                  "label": "Cedula / Rif",
+                  "tipo": "input",
+                  "mensaje_error": "Indique documento de identidad",
+                  "required": true
+              },
+              {
+                  "key": "nombre",
+                  "name": "nombre",
+                  "label": "Nombre",
+                  "mensaje_error": "Indique nombre del proveedor ",
+                  "required": true
+              },
+              {
+                  "key": "telefono",
+                  "name": "telefono",
+                  "label": "Telefono de contacto"
+              },
+              {
+                  "key": "email",
+                  "name": "email",
+                  "label": "Correo electronico"
+              },
+              {
+                  "key": "direcion",
+                  "name": "direccion",
+                  "label": "Dirección",
+                  "multiline": true,
+                  "numberOfLines": 4
+              },
+              {
+                  "key": "contacto",
+                  "name": "contacto",
+                  "label": "Contactos",
+                  "multiline": true,
+                  "numberOfLines": 2
+              },
+              {
+                  "nombre": "codigo",
+                  "tipo": "auto-codigo",
+                  "label": "Código",
+                  "placeholder": "Código",
+                  "title": "Código",
+                  "mensaje_error": "C",
+                  "disabled": true,
+                  "numberOfLines": "",
+                  "getOptionLabel": [
+                      "titulo"
+                  ],
+                  "key": "codigo",
+                  "name": "codigo",
+                  "multiline": false
               }
           ]
         },
@@ -354,7 +632,97 @@ export const valores_sistema={
                 "permisos": ["Sistema","/sistema","recibos", "Recibos"]
             }
         ],
-    
+        "lista_categoria_productos": [
+            {
+                "_id": 0,
+                "titulo": "Peluqueria",
+                "value": "peluqueria",
+            },
+            {
+                "_id": 1,
+                "titulo": "Barberia",
+                "value": "barberia",
+            },
+            {
+                "_id": 2,
+                "titulo": "Uñas",
+                "value": "unas",
+            },
+            {
+                "_id": 3,
+                "titulo": "Cosméticos",
+                "value": "cosmeticos",
+            },
+            {
+                "_id": 4,
+                "titulo": "Hidrataciones",
+                "value": "hidrataciones",
+            },
+            {
+                "_id": 5,
+                "titulo": "Keratinas",
+                "value": "keratinas",
+            },
+            {
+                "_id": 6,
+                "titulo": "Varios",
+                "value": "varios",
+            },
+        ],
+        "lista_tipo": [
+            {
+                "_id": 0,
+                "titulo": "Factura",
+                "value": "factura",
+            },
+            {
+                "_id": 1,
+                "titulo": "Recibo",
+                "value": "recibo",
+            },
+            {
+                "_id": 2,
+                "titulo": "Nota de Entrega",
+                "value": "nota",
+            },
+            {
+                "_id": 3,
+                "titulo": "Producción interna",
+                "value": "produccion",
+            },
+            {
+                "_id": 4,
+                "titulo": "Otro",
+                "value": "otro",
+            }
+        ],
+        "lista_tipo_S": [
+            {
+                "_id": 0,
+                "titulo": "Venta",
+                "value": "venta",
+            },
+            {
+                "_id": 1,
+                "titulo": "Autoconsumo",
+                "value": "autoconsumo",
+            },
+            {
+                "_id": 2,
+                "titulo": "Muestra",
+                "value": "muestra",
+            },
+            {
+                "_id": 3,
+                "titulo": "Obsequio",
+                "value": "obsequio",
+            },
+            {
+                "_id": 4,
+                "titulo": "Deterioro",
+                "value": "deterioro",
+            }
+        ],
         "lista_Forma_Pago": [
             {
                 "_id": 0,
@@ -676,6 +1044,11 @@ export const valores_sistema={
                 "type": ""
             },
             {
+                "title": "Categoria",
+                "field": "categoria",
+                "tipo": "lista_categoria_productos"
+            },
+            {
                 "title": "Descripción",
                 "field": "descripcion",
                 "tipo": "",
@@ -684,10 +1057,26 @@ export const valores_sistema={
                 "type": ""
             },
             {
+                "title": "Entradas",
+                "field": "entradas",
+                "tipo": "number",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.entradas ? dato.valores.entradas : '0'}`\n}",
+                "default": "",
+                "type": ""
+            },
+            {
+                "title": "Salidas",
+                "field": "salidas",
+                "tipo": "number",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.salidas ? dato.valores.salidas : '0'}`\n}",
+                "default": "",
+                "type": ""
+            },
+            {
                 "title": "Cantidad Total",
                 "field": "cantidad",
-                "tipo": "",
-                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.cantidad ? dato.valores.cantidad : ''}`\n}",
+                "tipo": "number",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.cantidad ? dato.valores.cantidad : 0}`\n}",
                 "default": "",
                 "type": ""
             }
@@ -720,7 +1109,7 @@ export const valores_sistema={
                 "formato": "",
                 "default": "",
                 "type": "",
-                "width": 340,
+                "width": 300,
                 "flex": 7
             },
             {
@@ -731,6 +1120,14 @@ export const valores_sistema={
                 "default": "",
                 "type": "number",
                 "flex": 2
+            },
+            {
+              "title": "Monto",
+              "field": "monto",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",    
             }
         ],
         "Titulos_es_producto": [
@@ -755,13 +1152,84 @@ export const valores_sistema={
           {
               "title": "Cantidad",
               "field": "cantidad",
-              "tipo": "",
-              "formato": "(dato)=> {\nlet cantidad = Number(`${dato && dato.cantidad ? dato.cantidad : 0}`); \nreturn cantidad\n}",
+              "tipo": "number",
+              "formato": "",
               "default": "",
               "type": "number",
-              "editable": true
+              "editable": true,
+              "modificar":true
+          },
+          {
+              "title": "Monto",
+              "field": "monto",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+              "editable": true,
+              "modificar":true
+          },
+          {
+              "title": "Costo Unitario",
+              "field": "costou",
+              "tipo": "",
+              "formato": (resultado)=>{
+                
+                if (!resultado) return 0
+                
+                let costou =resultado.monto && resultado.cantidad ? resultado.monto / resultado.cantidad : 0; 
+                return costou
+              },
+              "default": "",
+              "type": "number",
+              "editable": false,
+              "modificar":false
           }
-      ],
+        ],
+        "Titulos_Proveedor": [
+          {
+              "title": "Cedula / Rif",
+              "field": "rif",
+              "formato": "(dato)=> `${dato.valores.rif}`"
+          },
+          {
+              "title": "Nombre",
+              "field": "nombre",
+              "formato": "(dato)=> `${dato.valores.nombre}`"
+          },
+          {
+              "title": "Telefono",
+              "field": "telefono",
+              "formato": "(dato)=> `${dato.valores.telefono}`"
+          },
+          {
+              "title": "Correo electronico",
+              "field": "email",
+              "formato": "(dato)=> `${dato.valores.email}`"
+          }
+        ],
+        "Titulos_Cliente": [
+          {
+              "title": "Cedula / Rif",
+              "field": "rif",
+              "formato": "(dato)=> `${dato.valores.rif}`"
+          },
+          {
+              "title": "Nombre",
+              "field": "nombre",
+              "formato": "(dato)=> `${dato.valores.nombre}`"
+          },
+          {
+              "title": "Telefono",
+              "field": "telefono",
+              "formato": "(dato)=> `${dato.valores.telefono}`"
+          },
+          {
+              "title": "Correo electronico",
+              "field": "email",
+              "formato": "(dato)=> `${dato.valores.email}`"
+          }
+        ],
     },
     "Subtotales":{
         "Subtotal_entrada_salida":[

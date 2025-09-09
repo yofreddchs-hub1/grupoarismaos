@@ -40,9 +40,9 @@ function Tabla_multiple (props) {
     const cambiarState = (nuevostate)=>{
         setState({...state, ...nuevostate, cambio:true})
     }
-    const Actualizar_data = (valores, cambiar=true)=>{
+    const Actualizar_data = async(valores, cambiar=true)=>{
         if(props.cargacompleta){
-            props.cargacompleta(valores);
+            valores = await props.cargacompleta(valores);
         }
         if (cambiar){
             cambiarState({cantidad:valores.cantidad, datos:valores.nuevodatos});

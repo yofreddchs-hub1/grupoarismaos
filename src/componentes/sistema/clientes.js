@@ -2,13 +2,11 @@
 import {  useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import Image from 'next/image';
-import { letramenu,colores} from '../tema';
-import { Typography } from '@mui/material';
+
 import TablaMultiple from '../herramientas/tabla/tabla_multiple';
-import { Titulos_todos, Ver_Valores, Form_todos } from '@/src/comunes';
+import { Titulos_todos, Ver_Valores, Form_todos, conexiones } from '@/src/comunes';
 import Cargando from '../cargar/cargaajustable';
+import { EntradasSalidas } from '../../comunes/delsistema';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -21,14 +19,14 @@ const Item = styled(Paper)(({ theme }) => ({
   }),
 }));
 
-export default function Usuarios(props) {
+export default function Cliente(props) {
     const {menus} = props;
     const [activo, setActivo] = useState(null);
     const [state, setState] = useState({cargando:true});
     const [alto, setAlto] = useState(0);
     useEffect(() => {
         const cargar = async()=>{
-            let titulos = await Titulos_todos(`Titulos_User_api`);
+            let titulos = await Titulos_todos(`Titulos_Cliente`);
             setState({...state, titulos, cargando:false});
         }
         console.log("Refresca usuarios")
@@ -39,17 +37,13 @@ export default function Usuarios(props) {
     }, [props]);
     const Condiciones = async(crear_campos,datos)=>{
         let {valores}= datos;
-        if (valores.passwordn!==''){
-          valores.newpassword=valores.passwordn;
-        }
         
-        delete valores.passwordn
-        delete valores.passwordc
-        
-        
-        valores.username = valores.username.toLowerCase();
         return valores;
     }
+    const Actualizar_valores = async(valores)=>{
+        return valores
+    }
+   
     return state.cargando ? <Cargando open={true}/> :(
         <TablaMultiple
             alto={'82%'}
@@ -59,12 +53,15 @@ export default function Usuarios(props) {
             Condiciones={Condiciones}
             Columnas={2}
             Config={Ver_Valores()}
-            Form_origen = {Form_todos(`Form_User_api`)}
-            Titulo_tabla={"Usuarios"}
-            Table={Ver_Valores().database.usuario}
+            Form_origen = {Form_todos(`Form_Cliente`)}
+            Titulo_tabla={"Clientes"}
+            Table={Ver_Valores().database.cliente}
             cargaporparte={{condicion:{}}}
             Titulos_tabla = {state.titulos}
-            Titulo_dialogo ={(dato)=> dato._id  ?  `Usuario ${dato.username}`: `Nuevo Usuario`}
+            Titulo_dialogo ={(dato)=> dato._id  ?  `Cliente "${dato.nombre}"`: `Nuevo Cliente`}
+            Actualizar_valores ={Actualizar_valores}
+            Eliminar={"nombre"}
+            Eliminar_props={"Desea eliminar el Cliente: "}
         />
     ) 
     

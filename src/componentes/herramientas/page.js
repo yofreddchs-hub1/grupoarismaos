@@ -527,8 +527,21 @@ export default function Page(props) {
       <div style={{}}>
         <div style={{ display: 'flex', flexDirection:'row', paddingTop:5}}>
           <Autocomplete valor={valor} values={values} Config={Config ? Config : Ver_Valores()}/>
-          {valor.agregar 
-            ? <IconButton title='Agregar sub-titulo'      
+          {valor.agregar && valor.agregar==='codebar'
+            ? <IconButton title={valor.agregartitle ? valor.agregartitle : ''}      
+                style={{ marginLeft:10,  }}
+                onClick={()=>{
+                  values.CodigoQR(valor,values);
+                  
+                }}
+                key={'buton-aceptar-'+valor.name}
+              >
+                <Icon sx={{ ...Config && Config.Estilos.Input_icono ? Config.Estilos.Input_icono : {}}} >
+                  qr_code_scanner
+                </Icon>
+              </IconButton>
+            : valor.agregar
+            ? <IconButton title='Agregar'      
                 style={{ marginLeft:10}}
                 onClick={()=>values.Mas(valor)}
                 key={'buton-aceptar-'+valor.name}
@@ -712,7 +725,7 @@ export default function Page(props) {
         <MobileDatePicker
           {...valor}
           label={valor.label}
-          value={valor.value ? valor.value : moment()}
+          value={ moment()}
           className={valorEstilo}
           onChange={(newValue) => {
             values.Cambio({target:{name:valor.name, value:newValue['$d']}});
@@ -792,7 +805,7 @@ export default function Page(props) {
               {valor.tipo==='codigo'
                 ? <IconButton
                     onClick={()=>{
-                      console.log('por aqui')
+                      
                       values.CodigoQR(valor);
                     }}
                     // onMouseDown={handleMouseDownPassword}
@@ -858,22 +871,23 @@ export default function Page(props) {
           {renderForm(valor)}
         </div>
       )}
-      {props.datos.Agregar 
+      {props.datos.Agregar
+
           ? <div>
               <IconButton
                 sx={classes.margin}
                 onClick={props.datos.Agregar_formulario}
                           
-             >
-               <AddCircleIcon color="secondary" style={{color:'green'}}/>
-             </IconButton>
-             <IconButton
+            >
+              <AddCircleIcon color="secondary" style={{color:'green'}}/>
+            </IconButton>
+            <IconButton
                 sx={classes.margin}
                 onClick={props.datos.Remover_formulario}
                           
-             >
-               <RemoveCircleIcon style={{color:'red'}}/>
-             </IconButton>
+            >
+              <RemoveCircleIcon style={{color:'red'}}/>
+            </IconButton>
             </div>
           : null
       }

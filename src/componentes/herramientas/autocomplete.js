@@ -45,7 +45,7 @@ export default function Listados(props) {
         if (lista===undefined) lista=[]
         setOptions([...valor.antes ? valor.antes : [], ...lista, ...valor.despues ? valor.despues : []]);
       }else{
-        console.log(valor.lista)
+        
         const listado = await conexiones.Leer_C([valor.lista],{[valor.lista]:valor.condicion ? valor.condicion : {}})
         if (listado.Respuesta==='Ok'){
           let lista= listado.datos[valor.lista].map( v=>{

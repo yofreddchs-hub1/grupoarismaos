@@ -23,14 +23,14 @@ const Item = styled(Paper)(({ theme }) => ({
   }),
 }));
 
-export default function Inventario(props) {
+export default function Proveedor(props) {
     const {menus} = props;
     const [activo, setActivo] = useState(null);
     const [state, setState] = useState({cargando:true});
     const [alto, setAlto] = useState(0);
     useEffect(() => {
         const cargar = async()=>{
-            let titulos = await Titulos_todos(`Titulos_Inventario`);
+            let titulos = await Titulos_todos(`Titulos_Proveedor`);
             setState({...state, titulos, cargando:false});
         }
         console.log("Refresca usuarios")
@@ -46,32 +46,9 @@ export default function Inventario(props) {
         return valores;
     }
     const Actualizar_valores = async(valores)=>{
-        console.log(valores);
-        // const entradasalida=[
-        //     {id:1, descripcion:'Entrada', fecha:"28/08//2025", cantidad:10},
-        //     {id:2, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-3},
-        //     {id:3, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-3},
-        //     {id:4, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-3},
-        //     {id:5, descripcion:'Entrada', fecha:"28/08/2025", cantidad:14},
-        //     {id:6, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-5}
-        // ]
-        let datos = await EntradasSalidas(valores._id);
-        console.log(datos);
-        valores.valores.entradasalida= datos.entradasalida;
         return valores
     }
-    const Actualizar_Datos = async(valores)=>{
-        // console.log(valores);
-        for (var i=0; i<valores.nuevodatos.length;i++){
-            const result= await EntradasSalidas(valores.nuevodatos[i].valores._id)
-            // console.log(result, valores.nuevodatos[i].valores)
-            valores.nuevodatos[i].valores.cantidad=result.cantidad;
-            valores.nuevodatos[i].valores.montop=result.pormedio;
-            valores.nuevodatos[i].valores.entradas=result.entradas;
-            valores.nuevodatos[i].valores.salidas=result.salidas;
-        }
-        return valores
-    }
+   
     return state.cargando ? <Cargando open={true}/> :(
         <TablaMultiple
             alto={'82%'}
@@ -81,15 +58,15 @@ export default function Inventario(props) {
             Condiciones={Condiciones}
             Columnas={2}
             Config={Ver_Valores()}
-            Form_origen = {Form_todos(`Form_Inventario`)}
-            Titulo_tabla={"Productos"}
-            Table={Ver_Valores().database.producto}
+            Form_origen = {Form_todos(`Form_Proveedor`)}
+            Titulo_tabla={"Proveedores"}
+            Table={Ver_Valores().database.proveedor}
             cargaporparte={{condicion:{}}}
             Titulos_tabla = {state.titulos}
-            Titulo_dialogo ={(dato)=> dato._id  ?  `Producto "${dato.nombre}"`: `Nuevo Producto`}
+            Titulo_dialogo ={(dato)=> dato._id  ?  `Proveedor "${dato.nombre}"`: `Nuevo Proveedor`}
             Actualizar_valores ={Actualizar_valores}
-            cargacompleta={Actualizar_Datos}
-            PEliminar={false}
+            Eliminar={"nombre"}
+            Eliminar_props={"Desea eliminar al proveedor: "}
         />
     ) 
     

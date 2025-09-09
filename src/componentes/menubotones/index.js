@@ -1,46 +1,30 @@
 'use client'
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
+import {  useState, useEffect } from 'react'
+
 import Grid from '@mui/material/Grid';
 import Image from 'next/image';
 import { letramenu,colores} from '../tema';
 import { Typography } from '@mui/material';
 import Scrollbars from '../herramientas/scrolbars';
+import { Ver_Valores } from '../../comunes';
 
-import usuario from '../../../public/file.svg'
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
-  }),
-}));
-// const menus=[
-//   {
-//     imagen: imagenes.Home,
-//     label:"Inicio",
-//     value:'incio'
-//   },
-//   {
-//     imagen: imagenes.Usuarios,
-//     label:"Usuarios",
-//     value:'usuarios'
-//   },
-//   {
-//     imagen: imagenes.Usuarios,
-//     label:"Usuarios",
-//     value:'usuarios'
-//   },
-// ]
 export default function MenuBontones(props) {
   const {menus} = props;
+  const [alto, setAlto] = useState(0);
+  useEffect(() => {      
+    if (typeof window !== 'undefined') { // Asegurarse de que window está disponible
+        setAlto(window.innerHeight);
+    }
+  }, [props]);
   return (
-    
-      <Grid container spacing={{ xs: 0.5, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+    <Scrollbars sx={{ height:alto * 0.8, flexGrow: 1, padding:0.5, ...Ver_Valores().Estilos.Dialogo_cuerpo ? Ver_Valores().Estilos.Dialogo_cuerpo :{}}}>
+      <Grid container spacing={{ xs: 0.5, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }}
+        sx={{
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      >
         {menus ? menus.map((val, index) => (
           <Grid key={index} 
             sx={{
@@ -53,8 +37,8 @@ export default function MenuBontones(props) {
               '&:hover': {
                 bgcolor: colores.fondosobreponer,
               },
-              height:{xs: 60,md: 75},
-              width: {xs: 70,md: 90}
+              height:{xs: 65,md: 75},
+              width: {xs: 70,md: 95}
             }}
             onClick={()=>{
               if (props.onChange){
@@ -89,7 +73,7 @@ export default function MenuBontones(props) {
         }
         
       </Grid>
-    
+    </Scrollbars>
     
   );
 }

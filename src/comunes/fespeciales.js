@@ -37,6 +37,51 @@ export default{
         }
         return resultado; 
     },
+    Editores_productos:(params)=>{
+        let editable=true;
+        
+        if ((['cantidad'].indexOf(params.row.titulo)!==-1) 
+            
+            ){ 
+            editable=false;
+        } 
+        
+        return editable; 
+    },
+    Cambio_tipo:(data, form)=>{
+        const pos= Buscar_campo('tipo', form);
+        
+        if (data.value._id===3 && pos!==-1){
+            form[pos].value['numero'].disabled=true
+            form[pos].value['numero'].required=false
+            data.resultados['Error-numero']='';
+        }else{
+            form[pos].value['numero'].disabled=false
+            form[pos].value['numero'].required=true
+            data.resultados.numero=null;
+            data.resultados['Error-numero']='';
+            
+        }
+        
+        return {resultados: data.resultados,form}
+    },
+    Cambio_tipo_s:(data, form)=>{
+        const pos= Buscar_campo('tipo', form);
+        
+        if (data.value._id!==0 && pos!==-1){
+            form[pos].value['numero'].disabled=true
+            form[pos].value['numero'].required=false
+            data.resultados['Error-numero']='';
+        }else{
+            form[pos].value['numero'].disabled=false
+            form[pos].value['numero'].required=true
+            data.resultados.numero=null;
+            data.resultados['Error-numero']='';
+            
+        }
+        
+        return {resultados: data.resultados,form}
+    },
     //////////////////
     Editores_formapago:(params)=>{
         let editable=true;

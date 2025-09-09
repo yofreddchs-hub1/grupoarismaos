@@ -64,9 +64,24 @@ export default function Home() {
             value:'entrada',
           },
           {
+            imagen: imagenes.Salida,
+            label:"Salida",
+            value:'salida',
+          },
+          {
             imagen: imagenes.Inventario,
-            label:"Inventario",
+            label:"Productos",
             value:'inventario',
+          },
+          {
+            imagen: imagenes.Proveedores,
+            label:"Proveedor",
+            value:'proveedor',
+          },
+          {
+            imagen: imagenes.Clientes,
+            label:"Cliente",
+            value:'cliente',
           },
           {
             imagen: imagenes.Usuarios,
@@ -101,47 +116,52 @@ export default function Home() {
   return cargando ? <Cargando open={true} /> : 
     Ver_Valores().User 
     ?(
-    <Box sx={{ flexGrow: 1, bgcolor:colores.fondo, p:2 }}>
+    <Box sx={{  bgcolor:colores.fondo, p:1 }}>
       <Grid container spacing={1}>
         <Grid size={12}>
-           <Item sx={menu1(alto)} >
-            <Grid container spacing={0.5}>
-              <Grid size={{ xs: 2.5, md: 2.5 }}>
-                
+          <Item sx={{...menu1(alto), display:'flex'}} >
+            <Grid container direction="row" spacing={0.5} size={12} 
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Grid size={{ xs: 2.5, md: "auto" }}>
+                <div style={{width:70, }}>
                 <Image                      
                     src={imagenes.Logo}
                     alt="Grupo Arismaos C.A."
                     
                     priority
                 />
+                </div>
+              </Grid>
+              <Grid size={{ xs: 6, md: 7 }}>
+                  <Typography variant="h5" 
+                    noWrap
+                    
+                  >
+                    GRUPO ARISMAOS
+                  </Typography>
                 
               </Grid>
-              <Grid size={{ xs: 6, md: 6 }}>
+              <Grid size={{ xs: 3.5, md: 3 }}>
+                
                   <Typography variant="subtitle1" 
                     component="a"
                     noWrap
-                    sx={letratasa}
+                    sx={{textDecoration:'none',...letratasa,}}
                     href={'https://www.bcv.org.ve/'}
                     target='_blank'
+                    title="Ir a https://www.bcv.org.ve"
                   >
                     USD {Ver_Valores() && Ver_Valores().tasa ? Ver_Valores().tasa.USD : "?"}
                   </Typography>
                 
               </Grid>
-              <Grid size={{ xs: 3, md: 3 }}>
-                  <Typography variant="subtitle1" 
-                    component="a"
-                    noWrap
-                    sx={letratasa}
-                    href={'https://www.bcv.org.ve/'}
-                    target='_blank'
-                  >
-                    USD {Ver_Valores() && Ver_Valores().tasa ? Ver_Valores().tasa.USD : "?"}
-                  </Typography>
-                
-              </Grid>
+              
             </Grid>
-            </Item>
+          </Item>
           
         </Grid>
         

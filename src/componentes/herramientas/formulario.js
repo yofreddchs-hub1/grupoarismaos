@@ -7,7 +7,9 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Dialogo from './dialogo';
 import Page from './page';
-import { Titulo_default,Form_todos, Ver_Valores, genera_formulario, crear_campos, Permiso, conexiones, nuevo_Valores } from '../../comunes';
+import { Titulo_default,Form_todos, Ver_Valores, 
+          genera_formulario, crear_campos, Permiso, 
+          conexiones, nuevo_Valores, Funciones_Especiales } from '../../comunes';
 import funcionesespeciales from '../../comunes/fespeciales';
 import QRScanner from '../qr-scanner';
 //Utilizado para la creacion de formulacios con distintos datos
@@ -71,10 +73,10 @@ class Formulario extends Component {
   Mas = async(valor)=>{
     // esta hecho solo para valores y campos
     let {form}=this.state;
-    const Config= this.state.config ? this.state.config : Ver_Valores().config
+    const Config= this.state.config ? this.state.config : Ver_Valores()
     
     const objeto= this.Buscar_objeto_p(valor.name,form);
-
+    console.log(Config, {...Config.Estilos.Botones ? Config.Estilos.Botones.Aceptar : {}})
     const titulos= await genera_formulario({valores:{}, campos: Form_todos(valor.form) },2)
     
     const formulario ={
@@ -119,7 +121,7 @@ class Formulario extends Component {
     }
     this.setState({dialogo:{ 
       open: true,
-      Titulo:'Nuevo',
+      Titulo:`Nuevo ${valor.label ? valor.label :  valor.title ? valor.title : valor.placeholder ? valor.placeholder : ''}`,
       Cuerpo:<Formulario {...formulario} />,
       Cerrar: ()=>this.setState({dialogo:{open:false}}),
       }
@@ -670,16 +672,24 @@ class Formulario extends Component {
       }
     })
   }
-  CodigoQR = (valor)=>{
-    console.log('Por codigoQR', valor);
+  CodigoQR = (valor, values)=>{
+    
     this.setState({dialogo:{ 
       open: true,
       tam:'xs',
       Titulo:'Leer Código',
-      Cuerpo:<QRScanner open type={"QR"} onResult={(resultado)=>{
-        console.log(resultado);
-        this.Cambio({target:{name:valor.name, value:resultado}});
-        this.setState({dialogo:{open:false}})
+      Cuerpo:<QRScanner open type={"QR"} onResult={async(resultado)=>{
+        this.setState({dialogo:{open:false}});
+        console.log(valor);
+        if (valor.onKeyDown){
+          let formato = Funciones_Especiales(valor.onKeyDown);
+          let resulta= await formato(resultado, valor);
+          console.log(resulta, resultado, values);
+          if (resulta!==null)
+            values.Cambio({target:{name:valor.name, value:resulta}});
+        }else{
+          this.Cambio({target:{name:valor.name, value:resultado}});
+        }
       }}/>,
       Cerrar: ()=>this.setState({dialogo:{open:false}}),
       }
@@ -694,7 +704,7 @@ class Formulario extends Component {
             datos={{...this.state}}
             http_server={this.props.http_server}
         />
-        <Dialogo  {...this.state.dialogo} config={this.state.config ? this.state.config : Ver_Valores().config ? Ver_Valores().config : {Estilos:{}}}/>
+        <Dialogo  {...this.state.dialogo} config={this.state.config ? this.state.config : Ver_Valores() ? Ver_Valores() : {Estilos:{}}}/>
       </div>
     )
   }

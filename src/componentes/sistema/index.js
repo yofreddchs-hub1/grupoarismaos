@@ -2,16 +2,14 @@
 import {  useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import Image from 'next/image';
-import { letramenu,colores} from '../tema';
-import { Typography } from '@mui/material';
 import Usuarios from './usuarios';
 import Login from '../login';
 import HomePage from './inicio';
 import Inventario from './inventario';
 import Entradas from './entradas';
-
+import Salidas from './salidas';
+import Proveedor from './proveedores';
+import Cliente from './clientes';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
   ...theme.typography.body2,
@@ -44,10 +42,16 @@ export default function Sistema(props) {
             ?   <HomePage />
             :   activo && activo==="entrada"
             ?   <Entradas />
+            :   activo && activo==="salida"
+            ?   <Salidas />
             :   activo && activo==="inventario"
             ?   <Inventario />
             :   activo && activo==="usuarios"
             ?   <Usuarios />
+            :   activo && activo==="proveedor"
+            ?   <Proveedor />
+            :   activo && activo==="cliente"
+            ?   <Cliente />
             :   activo && activo==="salir"
             ?   <Login alto={'100hp'} {...props}/>
             :activo

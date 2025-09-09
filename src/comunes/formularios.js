@@ -81,9 +81,11 @@ const Dar_formato =(Form)=>{
                         return 'sin valores'
                     }
                     if (dato.valores && typeof dato.valores[valor.field]==='string')
-                    return `${lista[dato.valores[valor.field]].titulo}`
+                        return `${lista[dato.valores[valor.field]].titulo}`
                     if (dato.valores && typeof dato.valores[valor.field]==='object')
-                    return `${dato.valores[valor.field].titulo}`
+                        return `${dato.valores[valor.field].titulo}`
+                    if (dato.valores && typeof dato.valores[valor.field]==='undefined')
+                        return ''
                     return `${lista[dato[valor.field]].titulo}`
                 }
             }

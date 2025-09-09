@@ -229,7 +229,7 @@ export default function AntDesignGrid(props) {
           ...titulo,
           valueGetter:(dato)=>{
             
-            let valor =titulo.formato ? titulo.formato(dato) : dato.value; 
+            let valor =titulo.formato ? titulo.formato(dato) : dato ? dato.value : ''; 
             if (!valor || valor==='NaN'){
               if ((titulo.type==='date' || titulo.tipo==='Fecha') && titulo.default==='actual'){
                 titulo.formato=(dato)=>{
@@ -237,7 +237,7 @@ export default function AntDesignGrid(props) {
                 }
               }
               
-              valor=titulo.formato ? titulo.formato(dato.row): dato.row ? dato.row[titulo.field] :dato ;
+              valor=titulo.formato ? titulo.formato(dato.row): dato && dato.row ? dato.row[titulo.field] :dato ;
             }
             if (!valor || valor==='NaN')
               valor=titulo.formato && rows[dato.id]!==undefined ? titulo.formato(rows[dato.id]) : null
@@ -321,7 +321,9 @@ export default function AntDesignGrid(props) {
                   return moment(new Date(fecha)).format('DD/MM/YYYY');
                 }
               }
+              // console.log(titulo, resultado);
               let valor =titulo.formato ? titulo.formato(resultado) : null;
+              // console.log(valor)
               valor= String(valor)==='NaN' 
                       ? titulo.default
                       ? titulo.default
@@ -543,26 +545,27 @@ export default function AntDesignGrid(props) {
          
         onCellClick={async(dato)=>{
           // console.log('>>>>>>>>>>>>>>>',dato.field, dato, rows, dato.value)
-          // console.log(dato,dato.row)
+          // console.log(editables, dato,dato.row)
           const {id}= dato;
           const {title, field, tipo, type, valueOptions, getOptionLabel,
                   tabla_verificar, campo_verificar, mensaje_verificar, mensaje_verificar_error, mensaje_verificar_ok
                 } = dato.colDef;
           if (!editables || editables=='no') return
           let editable = true;
-          // quitado 'Debito',
-          if ((['Credito'].indexOf(dato.row.titulo)!==-1 && ['bancod'].indexOf(field)!==-1) 
-              || ((['Efectivo Bolívar','Efectivo Dolar'].indexOf(dato.row.titulo)!==-1) 
-                  && ['fecha','bancoo','bancod'].indexOf(field)!==-1)
-              ||  (field==='moneda' && dato.row.titulo!=='Otro')
-              || ((['Zelle'].indexOf(dato.row.titulo)!==-1) 
-                  && ['bancoo','bancod'].indexOf(field)!==-1)
-              ){ 
-              editable=false;
-          } 
+          // // quitado 'Debito',
+          // if ((['Credito'].indexOf(dato.row.titulo)!==-1 && ['bancod'].indexOf(field)!==-1) 
+          //     || ((['Efectivo Bolívar','Efectivo Dolar'].indexOf(dato.row.titulo)!==-1) 
+          //         && ['fecha','bancoo','bancod'].indexOf(field)!==-1)
+          //     ||  (field==='moneda' && dato.row.titulo!=='Otro')
+          //     || ((['Zelle'].indexOf(dato.row.titulo)!==-1) 
+          //         && ['bancoo','bancod'].indexOf(field)!==-1)
+          //     ){ 
+          //     editable=false;
+          // } 
           let resultado= tipo==='Fecha' ? new Date() : dato.value;
           const restan =  props.Subtotalvalor && (props.Subtotalvalor.restan || props.Subtotalvalor.restanb) ? dato.row.moneda==='$' ? props.Subtotalvalor.restan : props.Subtotalvalor.restanb : 0;
           const titulo = tipo==='moneda' ? `${title}: (Restan ${dato.row.moneda} ${Number(restan).toFixed(2)})` : title;
+          console.log(editable, dato.colDef.modificar)
           if (dato.colDef.modificar && editable){
             // let texto='';
             // if (dato.colDef.formato_mensaje_recomienda){
@@ -649,7 +652,7 @@ export default function AntDesignGrid(props) {
                     handleEditRowsModelChange({[id]:{[field]:{value:resultado}}})
                     setDialogo({...dialogo,open:false})
                   },
-                  sx:{...Config.Estilos.Botones ? Config.Estilos.Botones.Aceptar : {}},
+                  sx:{...Ver_Valores().Estilos.Botones },
                 },
                 ...dato.colDef.verificar==='quitar por ahora' ? [
                   {
