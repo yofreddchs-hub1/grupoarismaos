@@ -12,6 +12,7 @@ import { conexiones, genera_formulario } from '../../comunes';
 import Formulario from '../herramientas/formulario';
 import moment from 'moment';
 import Scrollbars from '../herramientas/scrolbars';
+import { Buscar_campo } from '../../comunes/fespeciales';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -40,35 +41,43 @@ export default function Salidas(props) {
       let {fecha, numero, tipo,movimiento}= valores;
       let referencia = await conexiones.Serial({tabla:tabla,id:'SP', cantidad:8})
       referencia= referencia.Recibo;
-      console.log(referencia)
       fecha= fecha==="" ? moment() : moment(fecha);
-      console.log(movimiento, tipo);
+
       let entradas = [];
       const respuesta = await conexiones.Guardar({valores:{referencia, fecha, numero, tipo,movimiento}, multiples_valores:true}, tabla)
-      console.log(respuesta)
+
       if (respuesta.Respuesta==='Ok'){
         const _id_ingreso=respuesta.resultado[respuesta.resultado.length-1]._id;
         for (var i=0; i< movimiento.length;i++){
-        const movimi= movimiento[i];
-        const entrada={
-          _id_ingreso,
-          _id_producto:movimi._id,
-          fecha,
-          numerocontrol:numero,
-          tipo:tipo,
-          descripcion:`Salida por ${tipo.titulo}${tipo._id===0 ? `, numero de control ${numero}` : ''}, de ${movimi.nombre}, cantidad: ${movimi.cantidad}`,
-          cantidad:-1 * Number(movimi.cantidad),
-          monto:Number(movimi.monto),
-          costou: movimi.cantidad && movimi.monto ? Number(movimi.monto)/Number(movimi.cantidad) : 0,
-          referencia:referencia,
+          const movimi= movimiento[i];
+          let {precio, cantidad, tasa, monto, montob} = movimi;
+          console.log(movimi);
+          cantidad = cantidad ? Number(cantidad) : 1
+          precio=Number(precio);
+          monto = precio * cantidad;
+          tasa= tasa ? tasa : Ver_Valores().tasa.USD;
+          montob = monto * tasa;
 
+          const salida={
+            _id_ingreso,
+            _id_producto:movimi._id,
+            fecha,
+            numerocontrol:numero,
+            tipo:tipo,
+            descripcion:`Salida por ${tipo.titulo}${tipo._id===0 ? `, numero de control ${numero}` : ''}, de ${movimi.nombre}, cantidad: ${movimi.cantidad}`,
+            cantidad:-1 * cantidad,
+            monto,
+            montob,
+            tasa,
+            referencia:referencia,
+
+          }
+          await conexiones.Guardar({valores:{...salida}, multiples_valores:true}, tablad)
+          entradas=[...entradas,salida]
         }
-        await conexiones.Guardar({valores:{...entrada}, multiples_valores:true}, tablad)
-        entradas=[...entradas,entrada]
-      }
       }
       
-      // setCambiar(cambiar+1);
+      setCambiar(cambiar+1);
       
       return valores
     }
@@ -77,8 +86,8 @@ export default function Salidas(props) {
       const cargar = async()=>{
             let titulos = await Titulos_todos(`Titulos_Inventario`);
             let nuevo = await genera_formulario({valores:{},campos:Form_todos('Form_Salidas')});
-            
-            nuevo.titulos[3].value.movimiento.style={
+            const pos = Buscar_campo('movimiento', nuevo.titulos);
+            nuevo.titulos[pos].value.movimiento.style={
               height: alto * 0.3
             }
             nuevo.botones=[
@@ -100,13 +109,7 @@ export default function Salidas(props) {
       }  
     }, [props]);
     
-    const Actualizar_valores = async(valores)=>{
-        console.log(valores);
-        
-        return valores
-    }
     return state.cargando ? <Cargando open={true} height={alto *0.8}/> :(
-        
         <Scrollbars sx={{ height:alto * 0.8, flexGrow: 1, padding:0.5, ...Ver_Valores().Estilos.Dialogo_cuerpo ? Ver_Valores().Estilos.Dialogo_cuerpo :{}}}>
             <Formulario {...state.formulario} Config={Ver_Valores()} />
         </Scrollbars>

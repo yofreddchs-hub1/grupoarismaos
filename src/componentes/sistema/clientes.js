@@ -1,27 +1,14 @@
 'use client'
 import {  useState, useEffect } from 'react'
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 
 import TablaMultiple from '../herramientas/tabla/tabla_multiple';
 import { Titulos_todos, Ver_Valores, Form_todos, conexiones } from '@/src/comunes';
 import Cargando from '../cargar/cargaajustable';
-import { EntradasSalidas } from '../../comunes/delsistema';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
-  }),
-}));
+
+
 
 export default function Cliente(props) {
-    const {menus} = props;
-    const [activo, setActivo] = useState(null);
     const [state, setState] = useState({cargando:true});
     const [alto, setAlto] = useState(0);
     useEffect(() => {
@@ -29,12 +16,18 @@ export default function Cliente(props) {
             let titulos = await Titulos_todos(`Titulos_Cliente`);
             setState({...state, titulos, cargando:false});
         }
+        if (alto!==0){
+            console.log('cargando',alto)
+            cargar();
+        }
+    },[alto]);
+    useEffect(() => {
         console.log("Refresca usuarios")
-        cargar();
         if (typeof window !== 'undefined') { // Asegurarse de que window está disponible
             setAlto(window.innerHeight);
         }
-    }, [props]);
+    }, []);
+
     const Condiciones = async(crear_campos,datos)=>{
         let {valores}= datos;
         

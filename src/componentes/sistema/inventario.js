@@ -33,7 +33,6 @@ export default function Inventario(props) {
             let titulos = await Titulos_todos(`Titulos_Inventario`);
             setState({...state, titulos, cargando:false});
         }
-        console.log("Refresca usuarios")
         cargar();
         if (typeof window !== 'undefined') { // Asegurarse de que window está disponible
             setAlto(window.innerHeight);
@@ -43,6 +42,9 @@ export default function Inventario(props) {
         let {valores}= datos;
         delete valores.entradasalida;
         delete valores['entradasalida-subtotal'];
+        delete valores.cantidad;
+        delete valores.entradas;
+        delete valores.salidas;
         return valores;
     }
     const Actualizar_valores = async(valores)=>{
@@ -56,19 +58,21 @@ export default function Inventario(props) {
         //     {id:6, descripcion:'Entrada', fecha:"28/08/2025", cantidad:-5}
         // ]
         let datos = await EntradasSalidas(valores._id);
-        console.log(datos);
+        // console.log(datos);
         valores.valores.entradasalida= datos.entradasalida;
         return valores
     }
     const Actualizar_Datos = async(valores)=>{
-        // console.log(valores);
+        let tasa = Ver_Valores().tasa.USD;
         for (var i=0; i<valores.nuevodatos.length;i++){
-            const result= await EntradasSalidas(valores.nuevodatos[i].valores._id)
+            // const result= await EntradasSalidas(valores.nuevodatos[i]._id)
             // console.log(result, valores.nuevodatos[i].valores)
-            valores.nuevodatos[i].valores.cantidad=result.cantidad;
-            valores.nuevodatos[i].valores.montop=result.pormedio;
-            valores.nuevodatos[i].valores.entradas=result.entradas;
-            valores.nuevodatos[i].valores.salidas=result.salidas;
+            //valores.nuevodatos[i].valores.cantidad=result.cantidad;
+            //valores.nuevodatos[i].valores.montop=Number(result.pormedio).toFixed(2);
+            valores.nuevodatos[i].valores.preciob=Number(valores.nuevodatos[i].valores.precio)* Number(Number(tasa).toFixed(2));
+            //valores.nuevodatos[i].valores.entradas=result.entradas;
+            //valores.nuevodatos[i].valores.salidas=result.salidas;
+            //valores.nuevodatos[i].valores.entradasalida=result.entradasalida;
         }
         return valores
     }

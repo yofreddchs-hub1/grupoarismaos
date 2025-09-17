@@ -56,7 +56,7 @@ class Tabla extends Component {
       if (cargacompleta){
         // cargacompleta({Titulo, datos:nuevodatos, cantidad});
         // console.log('>>>>>>>>>>>>>>>>>>>>>', Titulo, table, cantidad)
-        cargacompleta({table, nuevodatos});
+        await cargacompleta({table, nuevodatos});
       }
       this.actualizando=false;
       this.setState({actualizando:false});
@@ -117,7 +117,7 @@ class Tabla extends Component {
       // if (!cargaporparte){
         // console.log(this.state.pagina)
         if (cargacompleta){
-          cargacompleta({table, nuevodatos:datos, cantidad});
+          await cargacompleta({table, nuevodatos:datos, cantidad});
         }
       // }else{
 
@@ -139,7 +139,7 @@ class Tabla extends Component {
       
       let datos=[]
       let cantidad=0
-      cargacompleta({Titulo, datos, cantidad});
+      await cargacompleta({Titulo, datos, cantidad});
     }
     this.setState({actualizando:false, pagina:1})
   }

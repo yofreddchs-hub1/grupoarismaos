@@ -20,7 +20,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 import { conexiones, genera_formulario, crear_campos, 
           Ver_Valores} from '../../../comunes';
-import Cargando from '../../cargar/cargar';
+import Cargando from '../../cargar/cargaajustable';
 
 function Tabla_multiple (props) {
     
@@ -47,7 +47,7 @@ function Tabla_multiple (props) {
         if (cambiar){
             cambiarState({cantidad:valores.cantidad, datos:valores.nuevodatos});
         }
-        
+        return
         // nuevo_Valores({[`Actualizar_${state.table}`]:false});
     }
     
@@ -120,7 +120,9 @@ function Tabla_multiple (props) {
             open: !dialogo.open,
             // tam:'lg',
             Titulo:'Cargando...',
-            Cuerpo:<div style={{height:window.innerHeight * 0.4}}><Cargando Fondo={"#fff"} open={true} config={Ver_Valores()}/></div>,
+            Cuerpo: <div style={{height:window.innerHeight * 0.4}}>
+                        <Cargando Fondo={"#fff"} open={true} config={Ver_Valores()}/>
+                    </div>,
             Cerrar: ()=>{
                 setDialogo({...dialogo,open:false});
             },

@@ -74,6 +74,11 @@ export default function Home() {
             value:'inventario',
           },
           {
+            imagen: imagenes.Libro,
+            label:"Libro",
+            value:'libro',
+          },
+          {
             imagen: imagenes.Proveedores,
             label:"Proveedor",
             value:'proveedor',
@@ -145,12 +150,12 @@ export default function Home() {
                   </Typography>
                 
               </Grid>
-              <Grid size={{ xs: 3.5, md: 3 }}>
+              <Grid size={{ xs: 3.5, md: 3 }} sx={{textAlign:'right'}}>
                 
                   <Typography variant="subtitle1" 
                     component="a"
                     noWrap
-                    sx={{textDecoration:'none',...letratasa,}}
+                    sx={{textDecoration:'none',...letratasa, textAlign:'right'}}
                     href={'https://www.bcv.org.ve/'}
                     target='_blank'
                     title="Ir a https://www.bcv.org.ve"

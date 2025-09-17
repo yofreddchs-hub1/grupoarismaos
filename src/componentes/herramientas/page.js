@@ -243,7 +243,7 @@ const Entrada = (props)=>{
     
     const Config= props.config ? props.config : Ver_Valores();
     const estos = Object.keys(props).filter(f=> 
-      ['helperText', 'margin', 'no_modificar','no_mostrar', 'Subtotal', 'getOptionLabel', 'getOptionSelected', 'agregar', 'comparar'].indexOf(f)===-1)
+      ['helperText', 'margin', 'no_modificar','no_mostrar', 'Subtotal', 'getOptionLabel', 'getOptionSelected', 'agregar', 'comparar','seguir'].indexOf(f)===-1)
     let permitidos={}
     
     estos.map(v=>{
@@ -527,29 +527,34 @@ export default function Page(props) {
       <div style={{}}>
         <div style={{ display: 'flex', flexDirection:'row', paddingTop:5}}>
           <Autocomplete valor={valor} values={values} Config={Config ? Config : Ver_Valores()}/>
-          {valor.agregar && valor.agregar==='codebar'
-            ? <IconButton title={valor.agregartitle ? valor.agregartitle : ''}      
-                style={{ marginLeft:10,  }}
-                onClick={()=>{
-                  values.CodigoQR(valor,values);
-                  
-                }}
-                key={'buton-aceptar-'+valor.name}
-              >
-                <Icon sx={{ ...Config && Config.Estilos.Input_icono ? Config.Estilos.Input_icono : {}}} >
-                  qr_code_scanner
-                </Icon>
-              </IconButton>
-            : valor.agregar
-            ? <IconButton title='Agregar'      
-                style={{ marginLeft:10}}
-                onClick={()=>values.Mas(valor)}
-                key={'buton-aceptar-'+valor.name}
-              >
-                <AddCircleIcon key={'icon-aceptar-'+valor.name} style={{ color: green[500] }} fontSize="large"/>
-              </IconButton>
-            : null
-          }
+          <div style={{ display: 'flex', flexDirection:'row'}}>
+            {
+              valor.codebar && Ver_Valores().tipo==='movil'
+              ? <IconButton title={valor.agregartitle ? valor.agregartitle : ''}      
+                  sx={{ marginLeft:0.5  }}
+                  onClick={()=>{
+                    values.CodigoQR(valor,values);
+                    
+                  }}
+                  key={'buton-codebar-'+valor.name}
+                >
+                  <Icon sx={{ ...Config && Config.Estilos.Input_icono ? Config.Estilos.Input_icono : {}}} >
+                    qr_code_scanner
+                  </Icon>
+                </IconButton>
+              : null
+            }
+            {valor.agregar 
+              ? <IconButton title='Agregar'      
+                  sx={{ marginLeft:0.5}}
+                  onClick={()=>values.Mas(valor)}
+                  key={'buton-aceptar-'+valor.name}
+                >
+                  <AddCircleIcon key={'icon-aceptar-'+valor.name} style={{ color: green[500] }} fontSize="large"/>
+                </IconButton>
+              : null
+            }
+          </div>
         </div>
         {valor.error && valor.helperText &&(valor.value=== undefined || valor.value==='' || valor.value===null)
           ? <div style={{paddingLeft:20, marginTop:-5, textAlign:'justify'}}> 
@@ -607,11 +612,14 @@ export default function Page(props) {
         name={valor.name}
         // type={'number'}
         onKeyPress={
-          valor.onKeyPress ? 
-          (event) =>{
-            if (event.key==='Enter')
-              values.Responder(valor.onKeyPress,values.resultados, valor.validar, valor.pos ? valor.pos : 0)
-          } : null 
+          valor.onKeyPress && valor.seguir 
+          ? valor.onKeyPress
+          : valor.onKeyPress
+          ? (event) =>{
+              if (event.key==='Enter')
+                values.Responder(valor.onKeyPress,values.resultados, valor.validar, valor.pos ? valor.pos : 0)
+          } 
+          : null 
         }
         onChange={async (event) => {
           let {name, value} = event.target;
@@ -678,6 +686,7 @@ export default function Page(props) {
               nopaginar={valor.nopaginar}
               editables={valor.editables}
               noeliminar={valor.noeliminar}
+              condatos={valor.condatos}
               Acciones={valor.Acciones ? valor.Acciones : valor.acciones}
               agregartodos = {valor.agregartodos}
               style={valor.style}
@@ -801,8 +810,13 @@ export default function Page(props) {
           {...valor}   
           config={Config}
           endAdornment={
-            <div style={{ marginRight:-3}}>
-              {valor.tipo==='codigo'
+            <div style={{ marginRight:-1}}>
+              { valor.buscando 
+                ? <CircularProgress  size={20}
+                    thickness={5}
+                    sx={{ml:-4}}
+                  />
+                : valor.tipo==='codigo' && Ver_Valores().tipo==='movil'
                 ? <IconButton
                     onClick={()=>{
                       
@@ -816,10 +830,6 @@ export default function Page(props) {
                       qr_code_scanner
                     </Icon>
                   </IconButton>
-                : valor.buscando 
-                ? <CircularProgress  size={20}
-                    thickness={5}
-                  />
                 : <Icon sx={{marginLeft:-5,...Config && Config.Estilos.Input_icono ? Config.Estilos.Input_icono : {}}}>
                     manage_search
                   </Icon> }
@@ -856,10 +866,11 @@ export default function Page(props) {
 
   return form.length===0 && !values.botones ? (
     <div style={{...classes.root, ...classes.item}}>
-      <Typography >Esperando Formulario</Typography>
-      <Skeleton variant="rectangular"/>
-      <Skeleton animation={false} />
-      <Skeleton animation="wave" />
+      <Typography >Cargando...</Typography>
+      <Skeleton variant="rectangular" sx={{m:1}}/>
+      <Skeleton variant="rectangular" sx={{m:1}}/>
+      <Skeleton variant="rectangular" sx={{m:1}}/>
+      <Skeleton variant="rectangular" height={70} sx={{m:1}}/>
     </div>
   ) :(
     

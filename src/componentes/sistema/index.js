@@ -10,6 +10,7 @@ import Entradas from './entradas';
 import Salidas from './salidas';
 import Proveedor from './proveedores';
 import Cliente from './clientes';
+import Libro from './libro';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
   ...theme.typography.body2,
@@ -26,14 +27,14 @@ export default function Sistema(props) {
     const [activo, setActivo] = useState(null);
     
     useEffect(() => {
-        console.log("Nuevo")
-        let nuevo=null
-        menus.map(val=>{
-            if (val.activo){
-                nuevo= val.value;
-            }
-        })
-        setActivo(nuevo);
+      console.log("Nuevo")
+      let nuevo=null
+      menus.map(val=>{
+          if (val.activo){
+              nuevo= val.value;
+          }
+      })
+      setActivo(nuevo);
     }, [props]);
     
   return (
@@ -46,6 +47,8 @@ export default function Sistema(props) {
             ?   <Salidas />
             :   activo && activo==="inventario"
             ?   <Inventario />
+            :   activo && activo==="libro"
+            ?   <Libro />
             :   activo && activo==="usuarios"
             ?   <Usuarios />
             :   activo && activo==="proveedor"

@@ -13,12 +13,14 @@ export const valores_sistema={
     http2:"http://205.209.116.101:5005",
     http:"https://dev.raqlan.com",
     database:{
+        // pendiente en los datos de abaja que tienen tabla
         usuario:`${app}_User_api`,
         producto:`${app}_Mercancia`,
         ingreso:`${app}_Ingreso`,
         movimiento:`${app}_Movimiento`,
         proveedor:`${app}_Proveedor`,
         cliente:`${app}_Cliente`,
+        libro:`${app}_Libro`,
     },
     "Estilos": {
       "Logo": {
@@ -95,7 +97,7 @@ export const valores_sistema={
           "color": "#ffffff"
       },
       "Tabla_columna": {
-          "backgroundColor": "#9dfc74"
+          "backgroundColor": "#FAF2F2"
           
       },
       "Tabla_titulos": {
@@ -199,7 +201,7 @@ export const valores_sistema={
         ]
         },  
         "Form_Inventario": {
-            "columna": 2,
+            "columna": 3,
             "value": [
                 {
                     "key": "codigo",
@@ -208,7 +210,8 @@ export const valores_sistema={
                     "placeholder": "Código del Producto",
                     "title": "Código del Producto",
                     "mensaje_error": "Indique el código del producto",
-                    "required": true
+                    "required": true,
+                    "modificar":"Buscar_producto"
                 },
                 {
                     "key": "nombre",
@@ -229,7 +232,6 @@ export const valores_sistema={
                     "getOptionLabel": [
                         "titulo"
                     ],
-                    
                 },
                 {
                     "key": "stock",
@@ -239,6 +241,23 @@ export const valores_sistema={
                     "title": "Stock Minimo",
                     "mensaje_error": "Indique nombre del producto",
                     "default":1,
+                    "required": false
+                },
+                {
+                    "key": "montop",
+                    "name": "montop",
+                    "tipo": "number",
+                    "placeholder": "Monto Promedio",
+                    "title": "Monto Promedio",
+                    "required": false,
+                    "disabled":true
+                },
+                {
+                    "key": "precio",
+                    "name": "precio",
+                    "tipo": "monto",
+                    "placeholder": "Precio de Venta",
+                    "title": "Precio de Venta",
                     "required": false
                 },
                 {
@@ -276,12 +295,13 @@ export const valores_sistema={
                     "Subtotal": "Subtotal_entrada_salida",
                     "nopaginar":true,
                     "noeliminar":true,
-                    "style":{height:300}
+                    "style":{height:300},
+                    "condatos":true
                 }
             ]
         },  
         "Form_Ingresos": {
-            "columna": 3,
+            "columna": 4,
             "value": [
                 {
                     "nombre": "titulo1",
@@ -361,6 +381,7 @@ export const valores_sistema={
                     "titulos": "Titulos_es_producto",
                     "form":"Form_es_productos",
                     "nopaginar": true,
+                    "Subtotal":"Subtotal_entrada",
                     "style": {
                         "height": 300
                     },
@@ -370,7 +391,7 @@ export const valores_sistema={
             ]
         },
         "Form_Salidas": {
-            "columna": 3,
+            "columna": 4,
             "value": [
                 {
                     "nombre": "titulo1",
@@ -428,7 +449,7 @@ export const valores_sistema={
                     "label": "Cliente",
                     "placeholder": "Cliente",
                     "title": "Cliente",
-                    "required": true,
+                    "required": false,
                     "mensaje_error": "Debe seleccionar cliente",
                     "disabled": false,
                     "numberOfLines": "",
@@ -447,8 +468,9 @@ export const valores_sistema={
                     "name": "movimiento",
                     "label": " ",
                     "tipo": "Tabla",
-                    "titulos": "Titulos_es_producto",
+                    "titulos": "Titulos_ss_producto",
                     "form":"Form_es_productos",
+                    "Subtotal":"Subtotal_salida",
                     "nopaginar": true,
                     "style": {
                         "height": 300
@@ -458,13 +480,58 @@ export const valores_sistema={
                 }
             ]
         },
+        "Form_LibroM": {
+            "columna": 4,
+            "value": [
+                // {
+                //     "nombre": "titulo1",
+                //     "tipo": "subtitulo",
+                //     "label": "REGISTRO DE ENTRADAS Y SALIDAS",
+                //     "title": "REGISTRO DE ENTRADAS Y SALIDAS",
+                //     "name": "titulo1"
+                // },
+                {
+                    "nombre": "fecha",
+                    "tipo": "",
+                    "label": "Período",
+                    "placeholder": "",
+                    "title": "Período de entradas y salidas",
+                    "type":"month",
+                    "mensaje_error": "",
+                    "disabled": false,
+                    "numberOfLines": "",
+                    "getOptionLabel": [
+                        "titulo"
+                    ],
+                    "key": "fecha",
+                    "name": "fecha",
+                    "multiline": false
+                },
+                // {
+                //     "key": "movimietno",
+                //     "name": "movimiento",
+                //     "label": " ",
+                //     "tipo": "Tabla",
+                //     "titulos": "Titulos_libroES",
+                    
+                //     "nopaginar": true,
+                //     // "Subtotal":"Subtotal_entrada",
+                //     "style": {
+                //         "height": 300
+                //     },
+                //     "editables": "Editores_productos",
+                //     "required": true,
+                //     "noeliminar":true,
+                // }
+            ]
+        },
         "Form_es_productos": {
           "columna": 1,
           "value": [
               {
                   "nombre": "select_a",
                   "tipo": "lista_multiuso",
-                  "label": "Seleccione Producto",
+                  "label": "Producto",
                   "placeholder": "Seleccione Producto",
                   "title": "Seleccione Producto",
                   "mensaje_error": "",
@@ -477,8 +544,10 @@ export const valores_sistema={
                   ],
                   "key": "select_a",
                   "name": "select_a",
-                  "onKeyDown":"Buscar_producto",
-                  "agregar":"codebar"
+                  "onKeyDown":"Buscar_productos",
+                  "agregar":true,
+                  "form":"Form_Inventario",
+                  "codebar":true
               }
           ]
         },
@@ -601,6 +670,25 @@ export const valores_sistema={
                   "multiline": false
               }
           ]
+        },
+         "Form_Producto_noexiste": {
+            "columna": 3,
+            "value": [
+                {
+                    "nombre": "titulo1",
+                    "tipo": "subtitulo",
+                    "label": "Producto no Existe",
+                    "title": "Producto no Existe",
+                    "name": "titulo1"
+                },
+                {
+                    "nombre": "titulo2",
+                    "tipo": "subtitulo",
+                    "label": "¿Desea Agregarlo?",
+                    "title": "¿Desea Agregarlo?",
+                    "name": "titulo2"
+                }
+            ]
         },
     },
     "Listas": {
@@ -1033,7 +1121,9 @@ export const valores_sistema={
                 "tipo": "",
                 "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.codigo ? dato.valores.codigo : ''}`\n}",
                 "default": "",
-                "type": ""
+                "type": "",
+                "flex": 1,
+                // "width": 150,
             },
             {
                 "title": "Nombre",
@@ -1041,45 +1131,73 @@ export const valores_sistema={
                 "tipo": "",
                 "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.nombre ? dato.valores.nombre : ''}`\n}",
                 "default": "",
-                "type": ""
+                "type": "",
+                "flex": 1,
+                // "width": 150,
             },
             {
                 "title": "Categoria",
                 "field": "categoria",
-                "tipo": "lista_categoria_productos"
+                "tipo": "lista_categoria_productos",
+                
+            },
+            // {
+            //     "title": "Descripción",
+            //     "field": "descripcion",
+            //     "tipo": "",
+            //     "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.descripcion ? dato.valores.descripcion : ''}`\n}",
+            //     "default": "",
+            //     "type": ""
+            // },
+            {
+                "title": "Precio",
+                "field": "precio",
+                "tipo": "monto",
+                "moneda":"$",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.precio ? dato.valores.precio : '0'}`\n}",
+                "default": "",
+                "type": "",
+                // "width": 70,
             },
             {
-                "title": "Descripción",
-                "field": "descripcion",
-                "tipo": "",
-                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.descripcion ? dato.valores.descripcion : ''}`\n}",
+                "title": "Precio Bs",
+                "field": "preciob",
+                "tipo": "monto",
+                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.preciob ? dato.valores.preciob : '0'}`\n}",
                 "default": "",
-                "type": ""
+                "type": "",
+                // "width": 70,
             },
-            {
-                "title": "Entradas",
-                "field": "entradas",
-                "tipo": "number",
-                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.entradas ? dato.valores.entradas : '0'}`\n}",
-                "default": "",
-                "type": ""
-            },
-            {
-                "title": "Salidas",
-                "field": "salidas",
-                "tipo": "number",
-                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.salidas ? dato.valores.salidas : '0'}`\n}",
-                "default": "",
-                "type": ""
-            },
-            {
-                "title": "Cantidad Total",
-                "field": "cantidad",
-                "tipo": "number",
-                "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.cantidad ? dato.valores.cantidad : 0}`\n}",
-                "default": "",
-                "type": ""
-            }
+            // {
+            //     "title": "Entradas",
+            //     "field": "entradas",
+            //     "tipo": "number",
+            //     "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.entradas ? dato.valores.entradas : '0'}`\n}",
+            //     "default": "",
+            //     "type": "",
+            //     "align":"center",
+            //     "width": 40,
+            // },
+            // {
+            //     "title": "Salidas",
+            //     "field": "salidas",
+            //     "tipo": "number",
+            //     "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.salidas ? dato.valores.salidas : '0'}`\n}",
+            //     "default": "",
+            //     "type": "",
+            //     "align":"center",
+            //     "width": 40,
+            // },
+            // {
+            //     "title": "Cant. Actual",
+            //     "field": "cantidad",
+            //     "tipo": "number",
+            //     "formato": "(dato)=> {\nreturn `${dato.valores && dato.valores.cantidad ? dato.valores.cantidad : 0}`\n}",
+            //     "default": "",
+            //     "type": "",
+            //     "align":"center",
+            //     "width": 50,
+            // }
         ],
         "Titulos_entrada_salida": [
             {
@@ -1138,7 +1256,8 @@ export const valores_sistema={
               "formato": "",
               "default": "",
               "type": "",
-              "flex": 0.25 
+              "flex": 1.5,
+              "width": 60
           },
           {
               "title": "Descripción",
@@ -1147,44 +1266,159 @@ export const valores_sistema={
               "formato": "",
               "default": "",
               "type": "",
-              "flex": 3 
+              "flex": 4,
+              "width": 150
+          },
+          {
+              "title": "Tasa",
+              "field": "tasa",
+              "tipo": "monto",
+              "formato": "Tasa",
+              "default": "",
+              "type": "number",
+              "editable": true,
+              "modificar":true,
+              "flex": 1,
+              "width": 30,
           },
           {
               "title": "Cantidad",
               "field": "cantidad",
               "tipo": "number",
-              "formato": "",
-              "default": "",
+              "formato": "Cantidad",
+              "default": 1,
               "type": "number",
               "editable": true,
-              "modificar":true
+              "modificar":true,
+              "flex": 1,
+              "width": 30,
           },
           {
-              "title": "Monto",
+              "title": "Monto $",
               "field": "monto",
               "tipo": "monto",
               "formato": "",
               "default": "",
               "type": "number",
               "editable": true,
-              "modificar":true
+              "modificar":true,
+              "flex": 1,
+              "width": 50,
           },
           {
-              "title": "Costo Unitario",
-              "field": "costou",
-              "tipo": "",
-              "formato": (resultado)=>{
-                
-                if (!resultado) return 0
-                
-                let costou =resultado.monto && resultado.cantidad ? resultado.monto / resultado.cantidad : 0; 
-                return costou
-              },
+              "title": "Monto Bs",
+              "field": "montob",
+              "tipo": "monto",
+              "formato": "MontoBs",
               "default": "",
               "type": "number",
               "editable": false,
-              "modificar":false
+              "modificar":false,
+              "flex": 1,
+              "width": 50,
+          },
+          {
+              "title": "Costo Unitario $",
+              "field": "costou",
+              "tipo": "",
+              "formato": "CostoUnitario",
+              "default": "",
+              "type": "number",
+              "editable": false,
+              "modificar":false,
+              "flex": 1.5,
+              "width": 50,
+          },
+          {
+              "title": "Costo Unitario Bs",
+              "field": "costoub",
+              "tipo": "",
+              "formato": "CostoUnitariob",
+              "default": "",
+              "type": "number",
+              "editable": false,
+              "modificar":false,
+              "flex": 1.5,
+              "width": 50,
           }
+        ],
+        "Titulos_ss_producto": [
+          {
+              "title": "Código",
+              "field": "codigo",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "",
+              "flex": 1.5,
+              "width": 60
+          },
+          {
+              "title": "Descripción",
+              "field": "descripcion",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "",
+              "flex": 4,
+              "width": 150
+          },
+          {
+                "title": "Cantidad",
+                "field": "cantidad",
+                "tipo": "number",
+                "formato": "Cantidad",
+                "default": 1,
+                "type": "number",
+                "editable": true,
+                "modificar":true,
+                "flex": 1,
+                "width": 30,
+                "verificar":true,
+                "tabla_verificar":`${app}_Mercancia`,
+                "campo_verificar":"valores.codigo",
+                "mensaje_verificar":"Verifica si se encuentra cantidad disponible",
+                "mensaje_verificar_error": "En existencia solo: ",
+                "mensaje_verificar_ok":"Referencia no se encuentra registrada",
+                "condicion_verificar":"Verifica_cantidad"
+          },
+          {
+              "title": "Precio $",
+              "field": "precio",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+              "editable": true,
+              "modificar":true,
+              "flex": 1,
+              "width": 50,
+          },
+          {
+              "title": "Monto $",
+              "field": "monto",
+              "tipo": "monto",
+              "formato": "Monto_Venta",
+              "default": "",
+              "type": "number",
+              "editable": false,
+              "modificar":false,
+              "flex": 1,
+              "width": 50,
+          },
+          {
+              "title": "Monto Bs",
+              "field": "montob",
+              "tipo": "monto",
+              "formato": "Monto_VentaBs",
+              "default": "",
+              "type": "number",
+              "editable": false,
+              "modificar":false,
+              "flex": 1,
+              "width": 50,
+          }
+          
         ],
         "Titulos_Proveedor": [
           {
@@ -1201,11 +1435,6 @@ export const valores_sistema={
               "title": "Telefono",
               "field": "telefono",
               "formato": "(dato)=> `${dato.valores.telefono}`"
-          },
-          {
-              "title": "Correo electronico",
-              "field": "email",
-              "formato": "(dato)=> `${dato.valores.email}`"
           }
         ],
         "Titulos_Cliente": [
@@ -1223,12 +1452,232 @@ export const valores_sistema={
               "title": "Telefono",
               "field": "telefono",
               "formato": "(dato)=> `${dato.valores.telefono}`"
+          }
+        ],
+        "Titulos_libroES": [
+          {
+              "title": "Descripción",
+              "fija":true,
+              "field": "nombre",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "",
+              "flex": 2.5,
+              "width": 310
           },
           {
-              "title": "Correo electronico",
-              "field": "email",
-              "formato": "(dato)=> `${dato.valores.email}`"
-          }
+              "title": "Cantidad",
+              "field": "cantidadI",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "align":"center",
+              "width": 100,
+          },
+          {
+              "title": "Costo UNI",
+              "field": "costouniI",
+              "tipo": "monto",
+              "formato": "",
+              "default": 1,
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              
+              "width": 100,
+          },
+          {
+              "title": "Monto Total",
+              "field": "montoI",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1,
+              "width": 100,
+          },
+          {
+              "title": "Cantidad",
+              "field": "cantidadE",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+              "align":"center",
+          },
+          {
+              "title": "Monto Bs",
+              "field": "montoE",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+              "align":"center",
+          },
+          {
+              "title": "Cantidad",
+              "field": "cantidadSV",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+              "align":"center",
+          },
+          {
+              "title": "Monto Bs",
+              "field": "montoSV",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+          },
+          {
+              "title": "Cantidad",
+              "field": "cantidadSA",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+              "align":"center",
+          },
+          {
+              "title": "Monto Bs",
+              "field": "montoSA",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+          },
+          {
+              "title": "Cantidad",
+              "field": "cantidadSM",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+              "align":"center",
+          },
+          {
+              "title": "Monto Bs",
+              "field": "montoSM",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+          },
+          {
+              "title": "Cantidad",
+              "field": "cantidadSO",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+              "align":"center",
+          },
+          {
+              "title": "Monto Bs",
+              "field": "montoSO",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+          },
+          {
+              "title": "Cantidad",
+              "field": "cantidadSD",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+              "align":"center",
+          },
+          {
+              "title": "Monto Bs",
+              "field": "montoSD",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+          },
+          {
+              "title": "Cantidad",
+              "field": "cantidadF",
+              "tipo": "",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+              "align":"center",
+          },
+          {
+              "title": "Monto Bs",
+              "field": "montoF",
+              "tipo": "monto",
+              "formato": "",
+              "default": "",
+              "type": "number",
+            //   "editable": false,
+            //   "modificar":false,
+              "flex": 1.5,
+              "width": 100,
+          },
         ],
     },
     "Subtotales":{
@@ -1257,6 +1706,54 @@ export const valores_sistema={
                     "formato": "Subtotal_entrada_salida",
                 }
             ]
-        ]
-    }
+        ],
+        "Subtotal_entrada": [
+            [
+                
+                {
+                    "title": "Total"
+                },
+                {
+                    "title": "$"
+                },
+                {
+                    "field": "subtotal",
+                    "default": 0,
+                    "formato": "(dato, resultado)=> Number((Number(dato.monto)).toFixed(2)) + Number(resultado.subtotal)"
+                },
+                {
+                    "title": "Bs"
+                },
+                {
+                    "field": "subtotalb",
+                    "default": 0,
+                    "formato": "Subtotal_bolivar"
+                }
+            ]       
+        ],
+        "Subtotal_salida": [
+            [
+                
+                {
+                    "title": "Total"
+                },
+                {
+                    "title": "$"
+                },
+                {
+                    "field": "subtotal",
+                    "default": 0,
+                    "formato": "(dato, resultado)=> Number((Number(dato.monto)).toFixed(2)) + Number(resultado.subtotal)"
+                },
+                {
+                    "title": "Bs"
+                },
+                {
+                    "field": "subtotalb",
+                    "default": 0,
+                    "formato": "Subtotal_bolivar"
+                }
+            ]       
+        ],
+    },
 }

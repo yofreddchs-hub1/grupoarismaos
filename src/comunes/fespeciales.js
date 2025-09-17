@@ -2,6 +2,7 @@ import moment from "moment";
 import { conexiones } from "./conexiones";
 import { Ver_Valores } from "./valores";
 import Link from '@mui/material/Link';
+import { EntradasSalidas } from "./delsistema";
 
 export default{
     Subtotal_entrada:(dato,resultado)=>{
@@ -19,7 +20,7 @@ export default{
         return Number(dato.cantidad)+ resultado.total
         
     },
-    Buscar_producto:async(value, valor )=>{
+    Buscar_productos:async(value, valor )=>{
         let resulta= await conexiones.Leer_C([valor.table],{
             [`${valor.table}`]:{'valores.codigo':value}
         });
@@ -81,6 +82,123 @@ export default{
         }
         
         return {resultados: data.resultados,form}
+    },
+    Tasa:(valor,resultado,tasa)=>{
+        if (typeof valor==='object' && !valor.tasa){
+            return tasa ? tasa : 0;
+        }else if(typeof valor==='number' && valor===0 && tasa){
+            return tasa
+        }
+        return valor && valor.tasa ? valor.tasa : valor!==0 ? valor : 0;
+    },
+    CostoUnitario:(valor, resultado)=>{
+        
+        if (!resultado) return 0
+        
+        let costou=0;
+        if (typeof resultado === 'object'){
+            costou =resultado.monto && resultado.cantidad ? Number(resultado.monto) / Number(resultado.cantidad) :  0; 
+        }else{
+            costou = resultado ? resultado : 0; 
+        }
+        
+        return costou
+    },
+    CostoUnitariob:(valor, resultado, tasa)=>{
+        
+        if (!resultado) return 0
+        
+        let costou=0;
+        if (typeof resultado === 'object'){
+            costou =resultado.monto && resultado.cantidad ? Number(resultado.monto) / Number(resultado.cantidad) :  0; 
+        }else{
+            costou = resultado ? resultado : 0; 
+        }
+        
+        return tasa ? costou * tasa : 0
+    },
+    MontoBs:(valor,resultado,tasa)=>{
+        if (!resultado) return 0
+        
+        let costou=0;
+        if (typeof resultado === 'object'){
+            costou =resultado.monto ? Number(resultado.monto):  0; 
+        }else{
+            costou = resultado ? resultado : 0; 
+        }
+        
+        return tasa ? costou * tasa : 0
+    },
+    Cantidad:(valor,resultado,tasa)=>{
+        
+        if (typeof valor==='object'){
+            return valor.cantidad!==undefined ? valor.cantidad : 1
+        }else if (typeof valor==="number"){
+            return valor
+        }else if (resultado && resultado.cantidad!==undefined){
+            return resultado.cantidad
+        }
+        
+        return   1;
+    },
+    Subtotal_bolivar:(dato, resultado)=> {
+        return Number(Number(dato.montob).toFixed(2))+Number(resultado.subtotalb)
+    },
+    Monto_Venta:(valor,resultado,tasa)=>{
+        if (!resultado) return 0
+        
+        let monto;
+        if (typeof resultado === 'object'){
+            monto =resultado.precio && resultado.cantidad ? Number(resultado.precio) * Number(resultado.cantidad) :  0; 
+        }else{
+            monto = resultado ? resultado : 0; 
+        }
+        
+        return monto;
+        
+    },
+    Monto_VentaBs:(valor,resultado,tasa)=>{
+        if (!resultado) return 0
+        
+        let monto;
+        if (typeof resultado === 'object'){
+            monto =resultado.precio && resultado.cantidad ? Number(resultado.precio) * Number(resultado.cantidad) :  0; 
+        }else{
+            monto = resultado ? resultado : 0; 
+        }
+        
+        return tasa ? monto * tasa : 0;
+        
+    },
+    Buscar_producto:async(data,form)=>{
+        let resulta= await conexiones.Leer_C([Ver_Valores().database.producto],{
+            [Ver_Valores().database.producto]:{'valores.codigo':data.value ? data.value : data}
+        })
+        console.log(resulta, data);
+        if(resulta.Respuesta==='Ok'){
+            let producto= resulta.datos[Ver_Valores().database.producto];
+            if (producto.length!==0){
+                data.resultados[`Error-${data.name}`]=`Este código ya se encuentra en el sistema`
+            }else{
+                data.resultados[`Error-${data.name}`]=``;
+            }
+        }
+        return {resultados: data.resultados,form} 
+    },
+    Verifica_cantidad:async(valores)=>{
+        const {tabla_verificar, campo_verificar, datos, resultado, mensaje_verificar_error}= valores;
+        const resul = await conexiones.Leer_C([tabla_verificar],{
+            [tabla_verificar]:{[campo_verificar]:datos.codigo}
+        })
+        if (resul.Respuesta==='Ok'){
+            const producto=resul.datos[tabla_verificar];
+            if (producto.length!==0){        
+                let datos = await EntradasSalidas(producto[0]._id);
+                if (datos.cantidad< Number(resultado)){
+                   return {Respuesta:'Error', Mensaje:mensaje_verificar_error ? mensaje_verificar_error + datos.cantidad : ''}
+                }
+            } 
+        }
     },
     //////////////////
     Editores_formapago:(params)=>{
@@ -423,7 +541,7 @@ export default{
     },
 }
 
-const Buscar_campo = (name, form) =>{
+export const Buscar_campo = (name, form) =>{
     let pos =-1;
     Object.keys(form).map((valor,i)=>{
       if(form[valor].value[name]){

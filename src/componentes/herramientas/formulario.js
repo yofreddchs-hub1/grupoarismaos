@@ -86,7 +86,7 @@ class Formulario extends Component {
           {
             name:'guardar', label:'Guardar', title:'Guardar valores',
             variant:"contained", color:"primary", icono:<CheckIcon/>,
-            sx:{...Config.Estilos.Botones ? Config.Estilos.Botones.Aceptar : {}},
+            style:{...Config.Estilos.Botones ? Config.Estilos.Botones.Aceptar : {}},
             onClick: async(valores, campos)=>{
               campos = await crear_campos(campos, Form_todos(valor.form))
               const nuevos= await conexiones.Guardar({campos, valores, multiples_valores:true},valor.table);
@@ -316,7 +316,8 @@ class Formulario extends Component {
                    Remover_formulario:this.Remover_formulario,
                    Refrescar_agregar:this.Refrescar_agregar,
                    Form_origen,
-                   CodigoQR:this.CodigoQR
+                   CodigoQR:this.CodigoQR,
+                   CodigoQRC:this.CodigoQRC
                   });
   }
 
@@ -527,14 +528,14 @@ class Formulario extends Component {
             name:'guardar', label:'Agregar', title:'Agregar item',
             variant:"contained", color:"primary", icono:<CheckIcon/>,
             onClick: this.Guardar_agregar, validar:'true',
-            sx:{...Config.Estilos.Botones ? Config.Estilos.Botones.Aceptar : {}},
+            style:{...Config.Estilos.Botones ? Config.Estilos.Botones.Aceptar : {}},
             disabled: !Permiso('guardar'),
           },
           {
             name:'cancelar', label:'Cancelar', title:'Cancelar',
             variant:"contained", icono:<CancelIcon/>,
             onClick: ()=>this.setState({dialogo:{open:false}}),
-            sx:{...Config.Estilos.Botones ? Config.Estilos.Botones.Cancelar : {}},
+            style:{...Config.Estilos.Botones ? Config.Estilos.Botones.Cancelar : {}},
           },
       ]
     }
@@ -561,7 +562,7 @@ class Formulario extends Component {
             name:'cancelar', label:'Cancelar', title:'Cancelar',
             variant:"contained", icono:<CancelIcon/>,
             onClick: ()=>this.setState({dialogo:{open:false}}),
-            sx:{...Config.Estilos.Botones ? Config.Estilos.Botones.Cancelar : {}},
+            style:{...Config.Estilos.Botones ? Config.Estilos.Botones.Cancelar : {}},
           },
       ]
     }
@@ -653,13 +654,13 @@ class Formulario extends Component {
             onClick: this.Quitar, validar:'true',
             disabled: !Permiso('eliminar'), confirmar:'true',
             confirmar_mensaje:'Desea eliminar',confirmar_campo:'tipo',
-            sx:{...Config.Estilos.Botones ? Config.Estilos.Botones.Eliminar : {}},
+            style:{...Config.Estilos.Botones ? Config.Estilos.Botones.Eliminar : {}},
           },
           {
             name:'cancelar', label:'Cancelar', title:'Cancelar',
             variant:"contained",  icono:<CancelIcon/>,
             onClick: ()=>this.setState({dialogo:{open:false}}),
-            sx:{...Config.Estilos.Botones ? Config.Estilos.Botones.Cancelar : {}},
+            style:{...Config.Estilos.Botones ? Config.Estilos.Botones.Cancelar : {}},
           },
       ]
     }
@@ -680,7 +681,6 @@ class Formulario extends Component {
       Titulo:'Leer Código',
       Cuerpo:<QRScanner open type={"QR"} onResult={async(resultado)=>{
         this.setState({dialogo:{open:false}});
-        console.log(valor);
         if (valor.onKeyDown){
           let formato = Funciones_Especiales(valor.onKeyDown);
           let resulta= await formato(resultado, valor);
@@ -694,6 +694,42 @@ class Formulario extends Component {
       Cerrar: ()=>this.setState({dialogo:{open:false}}),
       }
     })
+  }
+  CodigoQRC=async(valor, nuevo)=>{
+    const Config= this.state.config ? this.state.config : Ver_Valores()
+    console.log(valor, Config.Estilos.Botones);
+    //Form_Producto_noexiste
+    const titulos= await genera_formulario({valores:{}, campos: Form_todos("Form_Producto_noexiste") },2)
+    const formulario ={
+      datos:{},
+      titulos:titulos.titulos,
+      botones:[
+          {
+            name:'SI', label:'SI', title:'SI',
+            variant:"contained", color:"primary", icono:<CheckIcon/>,
+            style:{...Config.Estilos.Botones ? Config.Estilos.Botones.Aceptar : {}},
+            onClick: async(valores, campos)=>{
+              this.Mas(valor);
+            }, 
+            
+          },
+          {
+            name:'cancelar', label:'NO', title:'Cancelar',
+            variant:"contained", icono:<CancelIcon/>,
+            style:{...Config.Estilos.Botones ? Config.Estilos.Botones.Eliminar : {}},
+            onClick: ()=>this.setState({dialogo:{open:false}}),
+          },
+      ]
+    }
+    this.setState({dialogo:{ 
+      open: true,
+      tam:"xs",
+      Titulo:`NO ENCONTRADO`,
+      Cuerpo:<Formulario {...formulario} />,
+      Cerrar: ()=>this.setState({dialogo:{open:false}}),
+      }
+    })
+
   }
   render(){
     

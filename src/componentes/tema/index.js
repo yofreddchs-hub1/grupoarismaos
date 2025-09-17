@@ -14,6 +14,8 @@ import Entrada from '../../../public/imagenes/entradas.svg';
 import Salida from '../../../public/imagenes/salidas.svg';
 import Proveedores from '../../../public/imagenes/proveedores.svg';
 import Clientes from '../../../public/imagenes/clientes.svg';
+import Libro from '../../../public/imagenes/libro.svg';
+
 export const imagenes={
   Logo,
   Usuarios,
@@ -25,6 +27,7 @@ export const imagenes={
   Salida,
   Proveedores,
   Clientes,
+  Libro,
   Salir
 }
 const fondo = "#f8dcf0";

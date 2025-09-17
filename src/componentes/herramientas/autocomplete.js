@@ -164,8 +164,11 @@ export default function Listados(props) {
             let formato = Funciones_Especiales(valor.onKeyDown);
             let resultado= await formato(event.target.value, valor);
             
-            if (resultado!==null)
+            if (resultado!==null){
               values.Cambio({target:{name:valor.name, value:resultado}})
+            }else{
+              values.CodigoQRC(valor, event.target.value)
+            }
           }
         }
       }}

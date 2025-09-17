@@ -170,7 +170,7 @@ function CustomPagination() {
 
 export default function AntDesignGrid(props) {
   
-  const {Titulo, titulos, datos, externos, nopaginar, editables, noeliminar, Acciones, style, poderseleccionar, Config}= props;
+  const {Titulo, titulos, datos, externos, nopaginar, editables, noeliminar, Acciones, style, poderseleccionar, Config, condatos}= props;
   
   let Subtotalvalor= externos[props.name+'-subtotal'] ?  externos[props.name+'-subtotal'] : props.Subtotalvalor;
   
@@ -200,7 +200,7 @@ export default function AntDesignGrid(props) {
       ...nuevos,
     }
     setSeleccion(
-      <div style={{marginTop:-25, marginBottom:-35}}>
+      <div style={{marginTop:-25, marginBottom:-35, marginLeft:-24}}>
         <Formulario {...formulario} Config={Config}/>
       </div>
     )
@@ -227,10 +227,11 @@ export default function AntDesignGrid(props) {
           flex: titulo.flex ? titulo.flex : 1,
           width,
           ...titulo,
-          valueGetter:(dato)=>{
+          valueGetter:(dato,i)=>{
+            let valor =titulo.formato ? titulo.formato(dato,i,tasa) : dato ? dato.value : ''; 
             
-            let valor =titulo.formato ? titulo.formato(dato) : dato ? dato.value : ''; 
             if (!valor || valor==='NaN'){
+              // console.log('>>>>>>>>',titulo.field,dato,'1')
               if ((titulo.type==='date' || titulo.tipo==='Fecha') && titulo.default==='actual'){
                 titulo.formato=(dato)=>{
                   return moment(new Date()).format('DD/MM/YYYY');
@@ -239,8 +240,10 @@ export default function AntDesignGrid(props) {
               
               valor=titulo.formato ? titulo.formato(dato.row): dato && dato.row ? dato.row[titulo.field] :dato ;
             }
-            if (!valor || valor==='NaN')
+            if (!valor || valor==='NaN'){
+              // console.log('>>>>>>>>',titulo.field,dato,'2')
               valor=titulo.formato && rows[dato.id]!==undefined ? titulo.formato(rows[dato.id]) : null
+            }
             if (valor===null){
               valor= titulo.default ? titulo.default : '';
             }
@@ -299,20 +302,15 @@ export default function AntDesignGrid(props) {
 
   const Tasa_cambio = async() =>{
     let {tasa} = Ver_Valores();
-    // if (tasa===undefined){
-    //   let resp = await conexiones.ValorCambio();
-    //   if (resp.Respuesta==='Ok'){
-    //     nuevo_Valores({tasa:resp.valor});
-    //     setTasa(resp.valor === undefined ? 0 : resp.valor.USD!=='error' ? resp.valor.USD : resp.valor.dolartoday.sicad2);
-    //   }
-    // }else{
-      setTasa( tasa && tasa.USD!=='error' ? tasa.USD : tasa && tasa.dolartoday ? tasa.dolartoday.sicad2 : 0);
-    // }
+    tasa=tasa && tasa.USD!=='error' ? tasa.USD : tasa && tasa.dolartoday ? tasa.dolartoday.sicad2 : 0;
+    setTasa( tasa);
+    
     
     let titulosm=  await Titulos_todos(titulos, Config)
     let nuevo = datos 
         ? datos.map((data,i)=>{
           let resultado={...data, id: data.id && data.id!==null ? data.id : i};
+          //console.log(resultado);
           if (titulosm){
             titulosm.map(titulo=>{
               if (titulo.type==='date'&& resultado[titulo.field]){
@@ -321,17 +319,20 @@ export default function AntDesignGrid(props) {
                   return moment(new Date(fecha)).format('DD/MM/YYYY');
                 }
               }
-              // console.log(titulo, resultado);
-              let valor =titulo.formato ? titulo.formato(resultado) : null;
-              // console.log(valor)
+              //console.log('>>>>>>',titulo, resultado);
+              let valor =titulo.formato ? titulo.formato(resultado,resultado,tasa) : null;
+              
               valor= String(valor)==='NaN' 
                       ? titulo.default
                       ? titulo.default
                       : 0
                       : valor
+
+              // console.log(titulo.field, valor, resultado[titulo.field])
               if (titulo.field!=='id'){
                 resultado[titulo.field]= resultado[titulo.field] ? resultado[titulo.field] : valor
               }
+              // console.log(resultado[titulo.field])
               //para el caso de corregir moneda
               if (titulo.field==='moneda'){
                 resultado[titulo.field]= ['efectivodolar','zelle'].indexOf(resultado.value)!==-1 ? '$' : 'Bs'
@@ -358,7 +359,7 @@ export default function AntDesignGrid(props) {
 
   const handleEditRowsModelChange = (model) => {
     setEditRowsModel(model);
-    // console.log('..................',model)
+    //console.log('..................',model)
     // setTimeout(()=>{
       Cambio(model)
     // },500)
@@ -428,8 +429,8 @@ export default function AntDesignGrid(props) {
     return (
       <StyledGridOverlay>
         <svg
-          width="120"
-          height="100"
+          width={120}
+          height={100}
           viewBox="0 0 184 152"
           aria-hidden
           focusable="false"
@@ -489,8 +490,14 @@ export default function AntDesignGrid(props) {
       field,
       tabla_verificar, campo_verificar,
       mensaje_verificar_error, mensaje_verificar_ok,
+      condicion_verificar,
       resultado
     } = props;
+    if (condicion_verificar){
+      const formato = Funciones_Especiales(condicion_verificar);
+      const respuesta = formato(props);
+      return respuesta
+    }
     const resul = await conexiones.Leer_C([tabla_verificar],{
       [tabla_verificar]:{[campo_verificar]:resultado[field] ===undefined || typeof resultado==='string' ? resultado : resultado[field]}
     })
@@ -508,7 +515,8 @@ export default function AntDesignGrid(props) {
       }
     }
   }
-  return (
+  // console.log(datos, rows, condatos)
+  return condatos && rows.length===0 ? null :(
     <div>
     <div style={{height: '100%', width: '100%', marginTop:15, marginBottom:15, }}>
       <Stack direction={window.innerWidth > 750 ? "row" : "column"} 
@@ -537,7 +545,7 @@ export default function AntDesignGrid(props) {
         // hideFooter
         slots={{
           Pagination: !nopaginar ? CustomPagination : null,
-          NoRowsOverlay: CustomNoRowsOverlay,
+          noRowsOverlay: CustomNoRowsOverlay,
           footer: props.Subtotal 
                     ? () =>SubTotales({name:props.name, Subtotal:props.Subtotal, Cambio:props.Cambio, Subtotalvalor, rows, Config, tasa, externos}) 
                     : undefined
@@ -547,8 +555,10 @@ export default function AntDesignGrid(props) {
           // console.log('>>>>>>>>>>>>>>>',dato.field, dato, rows, dato.value)
           // console.log(editables, dato,dato.row)
           const {id}= dato;
+          
           const {title, field, tipo, type, valueOptions, getOptionLabel,
-                  tabla_verificar, campo_verificar, mensaje_verificar, mensaje_verificar_error, mensaje_verificar_ok
+                  tabla_verificar, campo_verificar, mensaje_verificar, mensaje_verificar_error, mensaje_verificar_ok,
+                  condicion_verificar
                 } = dato.colDef;
           if (!editables || editables=='no') return
           let editable = true;
@@ -565,7 +575,7 @@ export default function AntDesignGrid(props) {
           let resultado= tipo==='Fecha' ? new Date() : dato.value;
           const restan =  props.Subtotalvalor && (props.Subtotalvalor.restan || props.Subtotalvalor.restanb) ? dato.row.moneda==='$' ? props.Subtotalvalor.restan : props.Subtotalvalor.restanb : 0;
           const titulo = tipo==='moneda' ? `${title}: (Restan ${dato.row.moneda} ${Number(restan).toFixed(2)})` : title;
-          console.log(editable, dato.colDef.modificar)
+          // console.log(editable, dato.colDef.modificar)
           if (dato.colDef.modificar && editable){
             // let texto='';
             // if (dato.colDef.formato_mensaje_recomienda){
@@ -613,7 +623,14 @@ export default function AntDesignGrid(props) {
                     resultado = tipo==='Fecha' ? moment(resultados[name]).format('DD/MM/YYYY') : resultados[name];
                     // handleEditRowsModelChange({[id]:{[field]:{value:resultados[name]}}})
                     return valores
-                  }
+                  },
+                  onKeyPress:(event) =>{
+                    if (event.key==='Enter'){
+                      handleEditRowsModelChange({[id]:{[field]:{value:event.target.value}}})
+                      setDialogo({...dialogo,open:false})
+                    }
+                  },
+                  seguir:true
                 }
               ]
             }
@@ -621,6 +638,7 @@ export default function AntDesignGrid(props) {
               resultado= Number(restan).toFixed(2);
             }
             let formulario = await genera_formulario({valores:{[dato.field]:resultado}, campos: forma })
+            
             formulario={...formulario,
               botones:[
                 {
@@ -632,7 +650,8 @@ export default function AntDesignGrid(props) {
                       field,
                       tabla_verificar, campo_verificar,
                       mensaje_verificar_error, mensaje_verificar_ok,
-                      resultado
+                      condicion_verificar,
+                      resultado, datos:dato.row
                     })
                     
                     if (result!==undefined && result.Respuesta==='Error'){
@@ -664,7 +683,8 @@ export default function AntDesignGrid(props) {
                         field,
                         tabla_verificar, campo_verificar,
                         mensaje_verificar_error, mensaje_verificar_ok,
-                        resultado
+                        condicion_verificar,
+                        resultado, datos:dato.row
                       })
                       
                       // return resul
@@ -704,6 +724,7 @@ export default function AntDesignGrid(props) {
             const formato = Funciones_Especiales(editables);
             // const formato = eval(editables);
             const respuesta = formato(params);
+            
             return respuesta;
           }else if(editables==='no'){
             return false
@@ -819,7 +840,7 @@ const SubTotales= (props) =>{
                     color: 'primary.main',
                   },
                   
-                ...Config ? Config.Estilos.Tabla_subtotal : {}
+                ...Config ? Config.Estilos.Tabla_subtotal : Ver_Valores().Estilos.Tabla_subtotal
               }} 
       spacing={0.1} 
     >

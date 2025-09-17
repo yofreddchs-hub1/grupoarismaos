@@ -451,7 +451,7 @@ export default function Tabla(props) {
                       
                       let permitidos={}
                       Object.keys(ncolumn).map(p=>{
-                        if (['orden','vertical'].indexOf(p)===-1){
+                        if (['orden','vertical','fija','minWidth'].indexOf(p)===-1){
                           permitidos[p]=ncolumn[p];
                         }
                       })
