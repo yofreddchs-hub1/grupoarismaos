@@ -141,7 +141,7 @@ const HomePage = () => {
                           </React.Fragment>
                         }
                         secondary={
-                          <div>
+                          <React.Fragment>
                           <Stack direction="row" spacing={2}>
                               
                               <Typography
@@ -172,7 +172,7 @@ const HomePage = () => {
                               
                             
                           </Stack>
-                          </div>
+                          </React.Fragment>
                         }
                       />
                     </ListItem>

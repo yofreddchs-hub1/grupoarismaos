@@ -46,6 +46,15 @@ export const formatoDolar = new Intl.NumberFormat('en-US', {
 
 export const Inicio = async()=>{
     let tasa = await Tasa_cambio({});
+    
+    const respuesta= await conexiones.ValorCambio();
+    if (respuesta.Respuesta==="Ok"){
+      if (tasa.USD!== respuesta.valor.USD){
+        tasa = respuesta.valor;
+        Tasa_cambio({dato:tasa, status:'Guardar'})
+      }
+    }
+    
     let valores ={...valores_sistema, tasa};
     // let dir = window.location.protocol;
     // console.log(dir);
